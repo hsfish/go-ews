@@ -1,20 +1,21 @@
 package ewsutil
 
 import (
-	"github.com/mhewedy/ews"
 	"math"
+
+	"github.com/Abovo-Media/go-ews"
+	"github.com/Abovo-Media/go-ews/ewsxml"
 )
 
 // FindPeople find persona slice by query string
-func FindPeople(c ews.Client, q string) ([]ews.Persona, error) {
-
+func FindPeople(c ews.Client, q string) ([]ewsxml.Persona, error) {
 	req := &ews.FindPeopleRequest{IndexedPageItemView: ews.IndexedPageItemView{
 		MaxEntriesReturned: math.MaxInt32,
 		Offset:             0,
-		BasePoint:          ews.BasePointBeginning,
+		BasePoint:          ewsxml.BasePointBeginning,
 	}, ParentFolderId: ews.ParentFolderId{
-		DistinguishedFolderId: ews.DistinguishedFolderId{Id: "directory"}},
-		PersonaShape: &ews.PersonaShape{BaseShape: ews.BaseShapeIdOnly,
+		DistinguishedFolderId: ewsxml.DistinguishedFolderId{Id: "directory"}},
+		PersonaShape: &ews.PersonaShape{BaseShape: ewsxml.BaseShape_IdOnly,
 			AdditionalProperties: ews.AdditionalProperties{
 				FieldURI: []ews.FieldURI{
 					{FieldURI: "persona:DisplayName"},
@@ -27,7 +28,6 @@ func FindPeople(c ews.Client, q string) ([]ews.Persona, error) {
 	}
 
 	resp, err := ews.FindPeople(c, req)
-
 	if err != nil {
 		return nil, err
 	}

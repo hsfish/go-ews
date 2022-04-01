@@ -1,14 +1,15 @@
 package ewsutil
 
 import (
-	"github.com/mhewedy/ews"
+	"github.com/Abovo-Media/go-ews"
+	"github.com/Abovo-Media/go-ews/ewsxml"
 )
 
 // FindPeople find persona slice by query string
-func GetPersona(c ews.Client, personaID string) (*ews.Persona, error) {
+func GetPersona(c ews.Client, personaID string) (*ewsxml.Persona, error) {
 
 	resp, err := ews.GetPersona(c, &ews.GetPersonaRequest{
-		PersonaId: ews.PersonaId{Id: personaID},
+		PersonaId: ewsxml.PersonaId{Id: personaID},
 	})
 
 	if err != nil {

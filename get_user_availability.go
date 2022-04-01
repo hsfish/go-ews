@@ -4,68 +4,46 @@ import (
 	"encoding/xml"
 	"errors"
 	"time"
+
+	"github.com/Abovo-Media/go-ews/ewsxml"
 )
 
 type AttendeeType string
+type BusyType string
 
+//goland:noinspection GoUnusedConst
 const (
 	AttendeeTypeOrganizer AttendeeType = "Organizer"
 	AttendeeTypeRequired  AttendeeType = "Required"
 	AttendeeTypeOptional  AttendeeType = "Optional"
 	AttendeeTypeRoom      AttendeeType = "Room"
 	AttendeeTypeResource  AttendeeType = "Resource"
-)
 
-const (
 	RequestedViewNone           = "None"
 	RequestedViewMergedOnly     = "MergedOnly"
 	RequestedViewFreeBusy       = "FreeBusy"
 	RequestedViewFreeBusyMerged = "FreeBusyMerged"
 	RequestedViewDetailed       = "Detailed"
 	RequestedViewDetailedMerged = "DetailedMerged"
-)
 
-type BusyType string
-
-const (
-	BusyTypeFree      = "Free"
-	BusyTypeTentative = "Tentative"
-	BusyTypeBusy      = "Busy"
-	BusyTypeOOF       = "OOF"
-	BusyTypeNoData    = "NoData"
+	BusyTypeFree      BusyType = "Free"
+	BusyTypeTentative BusyType = "Tentative"
+	BusyTypeBusy      BusyType = "Busy"
+	BusyTypeOOF       BusyType = "OOF"
+	BusyTypeNoData    BusyType = "NoData"
 )
 
 type GetUserAvailabilityRequest struct {
 	XMLName             struct{}            `xml:"m:GetUserAvailabilityRequest"`
-	TimeZone            TimeZone            `xml:"t:TimeZone"`
+	TimeZone            ewsxml.TimeZone     `xml:"t:TimeZone"`
 	MailboxDataArray    MailboxDataArray    `xml:"m:MailboxDataArray"`
 	FreeBusyViewOptions FreeBusyViewOptions `xml:"t:FreeBusyViewOptions"`
 }
 
 type FreeBusyViewOptions struct {
-	TimeWindow                      TimeWindow `xml:"t:TimeWindow"`
-	MergedFreeBusyIntervalInMinutes int        `xml:"t:MergedFreeBusyIntervalInMinutes,omitempty"`
-	RequestedView                   string     `xml:"t:RequestedView"`
-}
-
-type TimeWindow struct {
-	StartTime time.Time `xml:"t:StartTime"`
-	EndTime   time.Time `xml:"t:EndTime"`
-}
-
-type TimeZone struct {
-	Bias         int          `xml:"t:Bias"`
-	StandardTime TimeZoneTime `xml:"t:StandardTime"`
-	DaylightTime TimeZoneTime `xml:"t:DaylightTime"`
-}
-
-type TimeZoneTime struct {
-	Bias      int    `xml:"t:Bias"`
-	Time      string `xml:"t:Time"`
-	DayOrder  int16  `xml:"t:DayOrder"`
-	Month     int16  `xml:"t:Month"`
-	DayOfWeek string `xml:"t:DayOfWeek"`
-	Year      string `xml:"Year,omitempty"`
+	TimeWindow                      ewsxml.TimeWindow `xml:"t:TimeWindow"`
+	MergedFreeBusyIntervalInMinutes int               `xml:"t:MergedFreeBusyIntervalInMinutes,omitempty"`
+	RequestedView                   string            `xml:"t:RequestedView"`
 }
 
 type MailboxDataArray struct {
@@ -137,7 +115,7 @@ type FreeBusyResponse struct {
 }
 
 type ResponseMessage struct {
-	Response
+	ewsxml.Response
 	DescriptiveLinkKey int `xml:"DescriptiveLinkKey"`
 }
 
@@ -149,7 +127,7 @@ type FreeBusyView struct {
 }
 
 type WorkingHours struct {
-	TimeZone           TimeZone           `xml:"TimeZone"`
+	TimeZone           ewsxml.TimeZone    `xml:"TimeZone"`
 	WorkingPeriodArray WorkingPeriodArray `xml:"WorkingPeriodArray"`
 }
 
@@ -168,8 +146,8 @@ type CalendarEventArray struct {
 }
 
 type CalendarEvent struct {
-	StartTime            Time                 `xml:"StartTime"`
-	EndTime              Time                 `xml:"EndTime"`
+	StartTime            ewsxml.Time          `xml:"StartTime"`
+	EndTime              ewsxml.Time          `xml:"EndTime"`
 	BusyType             BusyType             `xml:"BusyType"`
 	CalendarEventDetails CalendarEventDetails `xml:"CalendarEventDetails"`
 }
@@ -194,15 +172,15 @@ type getUserAvailabilityResponseBody struct {
 }
 
 // GetUserAvailability
-//https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/getuseravailability-operation
-func GetUserAvailability(c Client, r *GetUserAvailabilityRequest) (*GetUserAvailabilityResponse, error) {
+// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/getuseravailability-operation
+func GetUserAvailability(c Requester, r *GetUserAvailabilityRequest) (*GetUserAvailabilityResponse, error) {
 
 	xmlBytes, err := xml.MarshalIndent(r, "", "  ")
 	if err != nil {
 		return nil, err
 	}
 
-	bb, err := c.SendAndReceive(xmlBytes)
+	bb, err := c.Request(xmlBytes)
 	if err != nil {
 		return nil, err
 	}
@@ -227,7 +205,7 @@ func checkForFunctionalError(resp *GetUserAvailabilityResponse) error {
 
 	if len(resp.FreeBusyResponseArray.FreeBusyResponse) > 0 {
 		for _, rr := range resp.FreeBusyResponseArray.FreeBusyResponse {
-			if rr.ResponseMessage.ResponseClass == ResponseClassError {
+			if rr.ResponseMessage.ResponseClass == ewsxml.ResponseClass_Error {
 				return errors.New(rr.ResponseMessage.MessageText)
 			}
 		}

@@ -2,10 +2,12 @@ package ews
 
 import (
 	"encoding/xml"
-	"github.com/stretchr/testify/assert"
 	"log"
 	"testing"
 	"time"
+
+	"github.com/Abovo-Media/go-ews/ewsxml"
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_marshal_GetUserAvailabilityRequest(t *testing.T) {
@@ -25,16 +27,16 @@ func Test_marshal_GetUserAvailabilityRequest(t *testing.T) {
 	end, _ := time.Parse(time.RFC3339, "2006-02-25T23:59:59Z")
 
 	req := GetUserAvailabilityRequest{
-		TimeZone: TimeZone{
+		TimeZone: ewsxml.TimeZone{
 			Bias: 480,
-			StandardTime: TimeZoneTime{
+			StandardTime: ewsxml.TimeZoneTime{
 				Bias:      0,
 				Time:      "02:00:00",
 				DayOrder:  5,
 				Month:     10,
 				DayOfWeek: "Sunday",
 			},
-			DaylightTime: TimeZoneTime{
+			DaylightTime: ewsxml.TimeZoneTime{
 				Bias:      -60,
 				Time:      "02:00:00",
 				DayOrder:  1,
@@ -44,7 +46,7 @@ func Test_marshal_GetUserAvailabilityRequest(t *testing.T) {
 		},
 		MailboxDataArray: MailboxDataArray{MailboxData: mb},
 		FreeBusyViewOptions: FreeBusyViewOptions{
-			TimeWindow: TimeWindow{
+			TimeWindow: ewsxml.TimeWindow{
 				StartTime: start,
 				EndTime:   end,
 			},
@@ -155,7 +157,7 @@ func Test_unmarshal_GetUserAvailabilityResponse(t *testing.T) {
 	}
 
 	assert.Equal(t,
-		ResponseClassError,
+		ewsxml.ResponseClass_Error,
 		resp.Body.GetUserAvailabilityResponse.FreeBusyResponseArray.FreeBusyResponse[0].
 			ResponseMessage.ResponseClass,
 	)

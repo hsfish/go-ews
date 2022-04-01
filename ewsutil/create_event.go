@@ -1,57 +1,68 @@
 package ewsutil
 
 import (
-	"github.com/mhewedy/ews"
 	"time"
+
+	"github.com/Abovo-Media/go-ews"
+	"github.com/Abovo-Media/go-ews/ewsxml"
 )
 
 func CreateHTMLEvent(
-	c ews.Client, to, optional []string, subject, body, location string, from time.Time, duration time.Duration,
+	c ews.Client,
+	to, optional []string,
+	subject, body, location string,
+	from time.Time,
+	duration time.Duration,
 ) error {
-	return createEvent(c, to, optional, subject, body, location, "HTML", from, duration)
+	return createEvent(c, to, optional, subject, body, location, ewsxml.BodyType_HTML, from, duration)
 }
 
 // CreateEvent helper method to send Message
 func CreateEvent(
-	c ews.Client, to, optional []string, subject, body, location string, from time.Time, duration time.Duration,
+	c ews.Client,
+	to, optional []string,
+	subject, body, location string,
+	from time.Time,
+	duration time.Duration,
 ) error {
-	return createEvent(c, to, optional, subject, body, location, "Text", from, duration)
+	return createEvent(c, to, optional, subject, body, location, ewsxml.BodyType_Text, from, duration)
 }
 
 func createEvent(
-	c ews.Client, to, optional []string, subject, body, location, bodyType string, from time.Time, duration time.Duration,
+	c ews.Client,
+	to, optional []string,
+	subject, body, location string,
+	bodyType ewsxml.BodyType,
+	from time.Time,
+	duration time.Duration,
 ) error {
 
-	requiredAttendees := make([]ews.Attendee, len(to))
+	requiredAttendees := make([]ewsxml.Attendee, len(to))
 	for i, tt := range to {
-		requiredAttendees[i] = ews.Attendee{Mailbox: ews.Mailbox{EmailAddress: tt}}
+		requiredAttendees[i].Mailbox.EmailAddress = tt
 	}
 
-	optionalAttendees := make([]ews.Attendee, len(optional))
+	optionalAttendees := make([]ewsxml.Attendee, len(optional))
 	for i, tt := range optional {
-		optionalAttendees[i] = ews.Attendee{Mailbox: ews.Mailbox{EmailAddress: tt}}
+		optionalAttendees[i].Mailbox.EmailAddress = tt
 	}
 
-	room := make([]ews.Attendee, 1)
-	room[0] = ews.Attendee{Mailbox: ews.Mailbox{EmailAddress: location}}
+	room := make([]ewsxml.Attendee, 1)
+	room[0].Mailbox.EmailAddress = location
 
-	m := ews.CalendarItem{
-		Subject: subject,
-		Body: ews.Body{
-			BodyType: bodyType,
-			Body:     []byte(body),
-		},
-		ReminderIsSet:              true,
-		ReminderMinutesBeforeStart: 15,
-		Start:                      from,
-		End:                        from.Add(duration),
-		IsAllDayEvent:              false,
-		LegacyFreeBusyStatus:       ews.BusyTypeBusy,
-		Location:                   location,
-		RequiredAttendees:          []ews.Attendees{{Attendee: requiredAttendees}},
-		OptionalAttendees:          []ews.Attendees{{Attendee: optionalAttendees}},
-		Resources:                  []ews.Attendees{{Attendee: room}},
-	}
+	var m ewsxml.CalendarItem
+	m.Subject = subject
+	m.Body.BodyType = bodyType
+	m.Body.Contents = []byte(body)
+	m.ReminderIsSet = true
+	m.ReminderMinutesBeforeStart = 15
+	m.Start = from
+	m.End = from.Add(duration)
+	m.LegacyFreeBusyStatus = ewsxml.LegacyFreeBusyStatus_Busy
+	m.Location = location
+	m.RequiredAttendees = requiredAttendees
+	m.OptionalAttendees = optionalAttendees
+	m.Resources = room
 
 	return ews.CreateCalendarItem(c, m)
 }

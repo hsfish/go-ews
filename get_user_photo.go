@@ -3,6 +3,8 @@ package ews
 import (
 	"encoding/xml"
 	"errors"
+
+	"github.com/Abovo-Media/go-ews/ewsxml"
 )
 
 type GetUserPhotoRequest struct {
@@ -12,7 +14,7 @@ type GetUserPhotoRequest struct {
 }
 
 type GetUserPhotoResponse struct {
-	Response
+	ewsxml.Response
 	HasChanged  bool   `xml:"HasChanged"`
 	PictureData string `xml:"PictureData"`
 }
@@ -26,15 +28,14 @@ type getUserPhotoResponseBody struct {
 }
 
 // GetUserPhoto
-//https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/getuserphoto-operation
-func GetUserPhoto(c Client, r *GetUserPhotoRequest) (*GetUserPhotoResponse, error) {
-
+// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/getuserphoto-operation
+func GetUserPhoto(c Requester, r *GetUserPhotoRequest) (*GetUserPhotoResponse, error) {
 	xmlBytes, err := xml.MarshalIndent(r, "", "  ")
 	if err != nil {
 		return nil, err
 	}
 
-	bb, err := c.SendAndReceive(xmlBytes)
+	bb, err := c.Request(xmlBytes)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +46,7 @@ func GetUserPhoto(c Client, r *GetUserPhotoRequest) (*GetUserPhotoResponse, erro
 		return nil, err
 	}
 
-	if soapResp.Body.GetUserPhotoResponse.ResponseClass == ResponseClassError {
+	if soapResp.Body.GetUserPhotoResponse.ResponseClass == ewsxml.ResponseClass_Error {
 		return nil, errors.New(soapResp.Body.GetUserPhotoResponse.MessageText)
 	}
 

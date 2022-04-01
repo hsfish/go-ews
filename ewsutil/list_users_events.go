@@ -1,8 +1,10 @@
 package ewsutil
 
 import (
-	"github.com/mhewedy/ews"
 	"time"
+
+	"github.com/Abovo-Media/go-ews"
+	"github.com/Abovo-Media/go-ews/ewsxml"
 )
 
 type EventUser struct {
@@ -53,17 +55,17 @@ func buildGetUserAvailabilityRequest(
 	}
 	_, offset := time.Now().Zone()
 	req := &ews.GetUserAvailabilityRequest{
-		//https://github.com/MicrosoftDocs/office-developer-exchange-docs/issues/61
-		TimeZone: ews.TimeZone{
+		// https://github.com/MicrosoftDocs/office-developer-exchange-docs/issues/61
+		TimeZone: ewsxml.TimeZone{
 			Bias: -offset / 60,
-			StandardTime: ews.TimeZoneTime{ // I don't have much clue about the values here
+			StandardTime: ewsxml.TimeZoneTime{ // I don't have much clue about the values here
 				Bias:      0,
 				Time:      "02:00:00",
 				DayOrder:  5,
 				Month:     10,
 				DayOfWeek: "Sunday",
 			},
-			DaylightTime: ews.TimeZoneTime{ // I don't have much clue about the values here
+			DaylightTime: ewsxml.TimeZoneTime{ // I don't have much clue about the values here
 				Bias:      0,
 				Time:      "02:00:00",
 				DayOrder:  1,
@@ -73,7 +75,7 @@ func buildGetUserAvailabilityRequest(
 		},
 		MailboxDataArray: ews.MailboxDataArray{MailboxData: mb},
 		FreeBusyViewOptions: ews.FreeBusyViewOptions{
-			TimeWindow: ews.TimeWindow{
+			TimeWindow: ewsxml.TimeWindow{
 				StartTime: from,
 				EndTime:   from.Add(duration),
 			},

@@ -1,28 +1,24 @@
 package ewsutil
 
-import "github.com/mhewedy/ews"
+import (
+	"github.com/Abovo-Media/go-ews"
+	"github.com/Abovo-Media/go-ews/ewsxml"
+)
 
 // SendEmail helper method to send Message
 func SendEmail(c ews.Client, to []string, subject, body string) error {
+	var m ewsxml.Message
+	m.ItemClass = "IPM.Note"
+	m.Subject = subject
+	m.Body.BodyType = ewsxml.BodyType_Text
+	m.Body.Contents = []byte(body)
+	m.Sender.Mailbox.EmailAddress = c.Username()
 
-	m := ews.Message{
-		ItemClass: "IPM.Note",
-		Subject:   subject,
-		Body: ews.Body{
-			BodyType: "Text",
-			Body:     []byte(body),
-		},
-		Sender: ews.OneMailbox{
-			Mailbox: ews.Mailbox{
-				EmailAddress: c.GetUsername(),
-			},
-		},
+	for _, addr := range to {
+		m.ToRecipients = append(m.ToRecipients, ewsxml.Mailbox{
+			EmailAddress: addr,
+		})
 	}
-	mb := make([]ews.Mailbox, len(to))
-	for i, addr := range to {
-		mb[i].EmailAddress = addr
-	}
-	m.ToRecipients.Mailbox = append(m.ToRecipients.Mailbox, mb...)
 
 	return ews.CreateMessageItem(c, m)
 }

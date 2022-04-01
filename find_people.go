@@ -3,21 +3,8 @@ package ews
 import (
 	"encoding/xml"
 	"errors"
-)
 
-type BaseShape string
-
-const (
-	BaseShapeIdOnly        BaseShape = "IdOnly"
-	BaseShapeDefault       BaseShape = "Default"
-	BaseShapeAllProperties BaseShape = "AllProperties"
-)
-
-type BasePoint string
-
-const (
-	BasePointBeginning BasePoint = "Beginning"
-	BasePointEnd       BasePoint = "End"
+	"github.com/Abovo-Media/go-ews/ewsxml"
 )
 
 type FindPeopleRequest struct {
@@ -30,7 +17,7 @@ type FindPeopleRequest struct {
 }
 
 type PersonaShape struct {
-	BaseShape            BaseShape            `xml:"t:BaseShape,omitempty"`
+	BaseShape            ewsxml.BaseShape     `xml:"t:BaseShape,omitempty"`
 	AdditionalProperties AdditionalProperties `xml:"t:AdditionalProperties,omitempty"`
 }
 
@@ -46,13 +33,13 @@ type FieldURI struct {
 }
 
 type IndexedPageItemView struct {
-	MaxEntriesReturned int       `xml:"MaxEntriesReturned,attr,omitempty"`
-	Offset             int       `xml:"Offset,attr"`
-	BasePoint          BasePoint `xml:"BasePoint,attr"`
+	MaxEntriesReturned int              `xml:"MaxEntriesReturned,attr,omitempty"`
+	Offset             int              `xml:"Offset,attr"`
+	BasePoint          ewsxml.BasePoint `xml:"BasePoint,attr"`
 }
 
 type ParentFolderId struct {
-	DistinguishedFolderId DistinguishedFolderId `xml:"t:DistinguishedFolderId"`
+	DistinguishedFolderId ewsxml.DistinguishedFolderId `xml:"t:DistinguishedFolderId"`
 }
 
 type findPeopleResponseEnvelop struct {
@@ -64,7 +51,7 @@ type findPeopleResponseBody struct {
 }
 
 type FindPeopleResponse struct {
-	Response
+	ewsxml.Response
 	People                    People `xml:"People"`
 	TotalNumberOfPeopleInView int    `xml:"TotalNumberOfPeopleInView"`
 	FirstMatchingRowIndex     int    `xml:"FirstMatchingRowIndex"`
@@ -72,19 +59,19 @@ type FindPeopleResponse struct {
 }
 
 type People struct {
-	Persona []Persona `xml:"Persona"`
+	Persona []ewsxml.Persona `xml:"Persona"`
 }
 
 // GetUserAvailability
-//https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/findpeople-operation
-func FindPeople(c Client, r *FindPeopleRequest) (*FindPeopleResponse, error) {
+// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/findpeople-operation
+func FindPeople(c Requester, r *FindPeopleRequest) (*FindPeopleResponse, error) {
 
 	xmlBytes, err := xml.MarshalIndent(r, "", "  ")
 	if err != nil {
 		return nil, err
 	}
 
-	bb, err := c.SendAndReceive(xmlBytes)
+	bb, err := c.Request(xmlBytes)
 	if err != nil {
 		return nil, err
 	}
@@ -95,7 +82,7 @@ func FindPeople(c Client, r *FindPeopleRequest) (*FindPeopleResponse, error) {
 		return nil, err
 	}
 
-	if soapResp.Body.FindPeopleResponse.ResponseClass == ResponseClassError {
+	if soapResp.Body.FindPeopleResponse.ResponseClass == ewsxml.ResponseClass_Error {
 		return nil, errors.New(soapResp.Body.FindPeopleResponse.MessageText)
 	}
 

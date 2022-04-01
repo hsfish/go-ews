@@ -3,13 +3,13 @@ package ewsutil
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/mhewedy/ews"
+
+	"github.com/Abovo-Media/go-ews"
 )
 
 // GetUserPhoto
-//https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/getuserphoto-operation
+// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/getuserphoto-operation
 func GetUserPhotoBase64(c ews.Client, email string) (string, error) {
-
 	resp, err := ews.GetUserPhoto(c, &ews.GetUserPhotoRequest{
 		Email:         email,
 		SizeRequested: "HR48x48",
@@ -31,5 +31,5 @@ func GetUserPhoto(c ews.Client, email string) ([]byte, error) {
 }
 
 func GetUserPhotoURL(c ews.Client, email string) string {
-	return fmt.Sprintf("%s/s/GetUserPhoto?email=%s&size=HR48x48", c.GetEWSAddr(), email)
+	return fmt.Sprintf("%s/s/GetUserPhoto?email=%s&size=HR48x48", c.Url(), email)
 }

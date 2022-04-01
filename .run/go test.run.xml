@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="go test" type="GoTestRunConfiguration" factoryName="Go Test">
+    <module name="go-ews" />
+    <working_directory value="$PROJECT_DIR$" />
+    <kind value="DIRECTORY" />
+    <package value="github.com/Abovo-Media/go-ews" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$" />
+    <framework value="gotest" />
+    <method v="2" />
+  </configuration>
+</component>
