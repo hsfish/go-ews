@@ -1,86 +1,37 @@
-## EWS Exchange Web Service
-Exchange Web Service client for golang
+EWS Exchange Web Service
+========================
+[![Latest release][latest-release-img]][latest-release-url]
+[![Build status][build-status-img]][build-status-url]
+[![Go Report Card][report-img]][report-url]
+[![Documentation][doc-img]][doc-url]
 
-### usage:
-```go
-package main
+[latest-release-img]: https://img.shields.io/github/release/Abovo-Media/go-ews.svg?label=latest
+[latest-release-url]: https://github.com/Abovo-Media/go-ews/releases
+[build-status-img]: https://github.com/Abovo-Media/go-ews/workflows/Test/badge.svg
+[build-status-url]: https://github.com/Abovo-Media/go-ews/actions?query=workflow%3ATest
+[report-img]: https://goreportcard.com/badge/github.com/Abovo-Media/go-ews
+[report-url]: https://goreportcard.com/report/github.com/Abovo-Media/go-ews
+[doc-img]: https://godoc.org/github.com/Abovo-Media/go-ews?status.svg
+[doc-url]: https://pkg.go.dev/github.com/Abovo-Media/go-ews
 
-import (
-	"fmt"
-	"github.com/mhewedy/ews"
-	"github.com/mhewedy/ews/ewsutil"
-	"log"
-)
+Package `ews` is currently a work in progress.
 
-func main() {
+> This package started as a fork of github.com/mhewedy/ews but has since then 
+changed severely. Therefore it is not backwards compatible. See the UPGRADE 
+guide for additional details.
 
-	c := ews.NewClient(
-		"https://outlook.office365.com/EWS/Exchange.asmx",
-		"email@exchangedomain",
-		"password",
-		&ews.Config{Dump: true, NTLM: false},
-	)
-
-	err := ewsutil.SendEmail(c,
-		[]string{"mhewedy@gmail.com", "someone@else.com"},
-		"An email subject",
-		"The email body, as plain text",
-	)
-
-	if err != nil {
-		log.Fatal("err>: ", err.Error())
-	}
-
-	fmt.Println("--- success ---")
-}
-
+```sh
+go get github.com/Abovo-Media/go-ews
 ```
-> Note: if you are using an on-premises Exchange server (or even if you manage your servers at the cloud), you need to pass the username as `AD_DOMAINNAME\username` instead, for examle `MYCOMANY\mhewedy`.
 
-### Supported Feature matrix:
+```go
+import "github.com/Abovo-Media/go-ews"
+```
 
-| Category                         	| Operation            	| Supported*       	|
-|----------------------------------	|----------------------	|------------------	|
-| eDiscovery operations            	|                      	|                  	|
-| Exchange mailbox data operations 	|                      	|                  	|
-|                                  	| CreateItem operation 	| ✔️ (Email & Calendar)|
-|                                  	| GetUserPhoto      	| ✔️                |
-| Availability operations          	|                      	|                  	|
-|                                  	| GetUserAvailability  	| ✔️             	|
-|                                  	| GetRoomLists      	| ✔️             	|
-| Bulk transfer operations         	|                      	|                  	|
-| Delegate management operations   	|                      	|                  	|
-| Inbox rules operations           	|                      	|                  	|
-| Mail app management operations   	|                      	|                  	|
-| Mail tips operation              	|                      	|                  	|
-| Message tracking operations      	|                      	|                  	|
-| Notification operations          	|                      	|                  	|
-| Persona operations               	|                      	|                  	|
-|                                   | FindPeople            | ✔️             	|
-|                                   | GetPersona            | ✔️             	|
-| Retention policy operation       	|                      	|                  	|
-| Service configuration operation  	|                      	|                  	|
-| Sharing operations               	|                      	|                  	|
-| Synchronization operations       	|                      	|                  	|
-| Time zone operation              	|                      	|                  	|
-| Unified Messaging operations     	|                      	|                  	|
-| Unified Contact Store operations 	|                      	|                  	|
-| User configuration operations    	|                      	|                  	|
-
-* Not always 100% of fields are mapped.
-
-### Extras
-Besides the operations supported above, few new operations under the namespace `ewsutil` has been introduced:
-* `ewsutil.SendEmail` 
-* `ewsutil.CreateEvent`
-* `ewsutil.ListUsersEvents`
-* `ewsutil.FindPeople`
-* `ewsutil.GetUserPhoto`
-* `ewsutil.GetUserPhotoBase64`
-* `ewsutil.GetUserPhotoURL`
-* `ewsutil.GetPersona`
-
-NTLM is supported as well as Basic authentication
-
-#### Reference:
+## EWS operations reference
 https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/ews-operations-in-exchange
+
+## License
+Copyright © 2022 [Abovo Media](https://www.abovomedia.nl/). All rights reserved.
+
+Additional information can be found in the [LICENSE](LICENSE) file.
