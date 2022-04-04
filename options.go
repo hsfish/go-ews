@@ -11,7 +11,11 @@ type Option func(c *client) error
 
 func WithLogger(l Logger) Option {
 	return func(c *client) error {
-		c.log = l
+		if l == nil {
+			c.log = NopLogger()
+		} else {
+			c.log = l
+		}
 		return nil
 	}
 }
