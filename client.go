@@ -10,6 +10,7 @@ import (
 	"encoding/xml"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/Abovo-Media/go-ews/ewsxml"
 	"github.com/go-pogo/errors"
@@ -45,6 +46,7 @@ func NewClient(url string, ver Version, opts ...Option) (Client, error) {
 			CheckRedirect: func(req *http.Request, via []*http.Request) error {
 				return http.ErrUseLastResponse
 			},
+			Timeout: time.Second * 10,
 		},
 	}
 

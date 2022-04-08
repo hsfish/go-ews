@@ -3,6 +3,7 @@ package ews
 import (
 	"crypto/tls"
 	"net/http"
+	"time"
 
 	"github.com/Azure/go-ntlmssp"
 )
@@ -24,7 +25,15 @@ func WithDefaultLogger() Option { return WithLogger(DefaultLogger()) }
 
 func WithBasicAuth(user, pass string) Option {
 	return func(c *client) error {
-		c.basicAuth = [2]string{user, pass}
+		c.auth = [2]string{user, pass}
+		return nil
+	}
+}
+
+// WithTimeout sets the Timeout field on the http.Client.
+func WithTimeout(t time.Duration) Option {
+	return func(c *client) error {
+		c.http.Timeout = t
 		return nil
 	}
 }
