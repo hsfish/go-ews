@@ -112,6 +112,8 @@ func (c *client) Request(ctx context.Context, body interface{}) ([]byte, error) 
 		return nil, errors.WithStack(err)
 	}
 
+	c.log.HttpResponse(resp, data)
+
 	if resp.StatusCode != http.StatusOK {
 		return nil, NewError(resp)
 	}
@@ -171,6 +173,6 @@ func (c *client) createRequest(ctx context.Context, body interface{}) (*http.Req
 	}
 	req.Header.Set("Content-Type", "text/xml")
 
-	c.log.DumpRequest(req, buf)
+	c.log.HttpRequest(req, buf)
 	return req, nil
 }
