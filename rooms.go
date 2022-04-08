@@ -30,13 +30,15 @@ type GetRoomsRequest struct {
 	} `xml:"m:RoomList"`
 }
 
+// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/getroomsresponse
 type GetRoomsResponse struct {
 	ewsxml.Response
-	Rooms struct {
-		Room []struct {
-			Id ewsxml.Mailbox `xml:"Id"`
-		} `xml:"Room"`
-	} `xml:"Rooms"`
+	Rooms []struct {
+		Name         string
+		EmailAddress string
+		RoutingType  ewsxml.RoutingType
+		MailboxType  ewsxml.MailboxType
+	} `xml:"Rooms>Room>Id"`
 }
 
 func GetRooms(ctx context.Context, req Requester, email string) (*GetRoomsResponse, error) {
