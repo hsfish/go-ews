@@ -6,6 +6,8 @@ import (
 
 type ResponseClass string
 
+func (r ResponseClass) String() string { return string(r) }
+
 //goland:noinspection GoUnusedConst,GoSnakeCaseUsage
 const (
 	// ResponseClass_Success describes a request that is fulfilled.
@@ -37,6 +39,8 @@ type Response struct {
 	ResponseCode ResponseCode `xml:"ResponseCode"`
 	MessageXml   MessageXml   `xml:"MessageXml"`
 }
+
+func (r Response) String() string { return r.MessageText }
 
 type MessageXml struct {
 	ExceptionType       string `xml:"ExceptionType"`

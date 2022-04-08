@@ -6,7 +6,11 @@ import (
 
 type ConflictResolution string
 
+func (s ConflictResolution) String() string { return string(s) }
+
 type SendMeetingInvitationsOrCancellations string
+
+func (s SendMeetingInvitationsOrCancellations) String() string { return string(s) }
 
 //goland:noinspection GoUnusedConst,GoSnakeCaseUsage
 const (

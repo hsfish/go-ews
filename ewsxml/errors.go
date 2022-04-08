@@ -4,6 +4,8 @@ package ewsxml
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/responsecode
 type ResponseCode string
 
+func (r ResponseCode) String() string { return string(r) }
+
 //goland:noinspection GoUnusedConst
 const (
 	// NoError indicates no error occurred for the request.

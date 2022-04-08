@@ -5,7 +5,12 @@ import (
 )
 
 type MessageDisposition string
+
+func (s MessageDisposition) String() string { return string(s) }
+
 type SendMeetingInvitations string
+
+func (s SendMeetingInvitations) String() string { return string(s) }
 
 //goland:noinspection GoUnusedConst,GoSnakeCaseUsage
 const (

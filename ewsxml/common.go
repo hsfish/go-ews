@@ -2,6 +2,8 @@ package ewsxml
 
 type BasePoint string
 
+func (s BasePoint) String() string { return string(s) }
+
 const (
 	BasePointBeginning BasePoint = "Beginning"
 	BasePointEnd       BasePoint = "End"

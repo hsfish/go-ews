@@ -9,15 +9,21 @@ import (
 // dumpsters.
 type Traversal string
 
+func (s Traversal) String() string { return string(s) }
+
 // The BaseShape element identifies the set of properties to return in an item
 // or folder response.
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/baseshape
 type BaseShape string
 
+func (s BaseShape) String() string { return string(s) }
+
 // The BodyType element identifies how the body text is formatted in the
 // response.
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/bodytype
 type BodyType string
+
+func (s BodyType) String() string { return string(s) }
 
 //goland:noinspection GoUnusedConst,GoSnakeCaseUsage
 const (

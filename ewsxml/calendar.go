@@ -9,14 +9,20 @@ import (
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/sensitivity
 type Sensitivity string
 
+func (s Sensitivity) String() string { return string(s) }
+
 // The LegacyFreeBusyStatus element represents the free/busy status of the
 // calendar item.
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/legacyfreebusystatus
 type LegacyFreeBusyStatus string
 
+func (s LegacyFreeBusyStatus) String() string { return string(s) }
+
 // The CalendarItemType element represents the type of a calendar item.
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/calendaritemtype
 type CalendarItemType string
+
+func (s Sensitivity) CalendarItemType() string { return string(s) }
 
 //goland:noinspection GoUnusedConst,GoSnakeCaseUsage
 const (
@@ -137,3 +143,5 @@ type ConcatenatedString string
 func (c ConcatenatedString) Split(sep string) []string {
 	return strings.Split(string(c), sep)
 }
+
+func (s ConcatenatedString) String() string { return string(s) }
