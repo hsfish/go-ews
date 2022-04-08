@@ -38,7 +38,7 @@ func CreateMessageItem(c Requester, m ...ewsxml.Message) error {
 		return err
 	}
 
-	bb, err := c.Request(xmlBytes)
+	bb, err := c.Request(nil, xmlBytes)
 	if err != nil {
 		return err
 	}
@@ -63,7 +63,7 @@ func CreateCalendarItem(c Requester, ci ...ewsxml.CalendarItem) error {
 		return err
 	}
 
-	bb, err := c.Request(xmlBytes)
+	bb, err := c.Request(nil, xmlBytes)
 	if err != nil {
 		return err
 	}

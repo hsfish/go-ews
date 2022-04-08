@@ -1,6 +1,7 @@
 package ews
 
 import (
+	"context"
 	"encoding/xml"
 	"time"
 
@@ -27,7 +28,7 @@ type FindItemCalendarViewResponse struct {
 	} `xml:"m:ResponseMessages"`
 }
 
-func GetCalendars(req Requester, email string, start, end time.Time) (*FindItemCalendarViewResponse, error) {
+func GetCalendars(ctx context.Context, req Requester, email string, start, end time.Time) (*FindItemCalendarViewResponse, error) {
 	var in FindItemCalendarViewRequest
 	in.Traversal = ewsxml.Traversal_Shallow
 	in.ItemShape.BaseShape = ewsxml.BaseShape_Default
@@ -38,6 +39,6 @@ func GetCalendars(req Requester, email string, start, end time.Time) (*FindItemC
 	in.CalendarView.MaxEntriesReturned = 10
 
 	var out FindItemCalendarViewResponse
-	err := requestAndUnmarshal(req, in, &out)
+	err := requestAndUnmarshal(ctx, req, in, &out)
 	return &out, err
 }

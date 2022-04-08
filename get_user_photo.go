@@ -35,7 +35,7 @@ func GetUserPhoto(c Requester, r *GetUserPhotoRequest) (*GetUserPhotoResponse, e
 		return nil, err
 	}
 
-	bb, err := c.Request(xmlBytes)
+	bb, err := c.Request(nil, xmlBytes)
 	if err != nil {
 		return nil, err
 	}

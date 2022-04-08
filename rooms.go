@@ -1,6 +1,7 @@
 package ews
 
 import (
+	"context"
 	"encoding/xml"
 
 	"github.com/Abovo-Media/go-ews/ewsxml"
@@ -17,9 +18,9 @@ type GetRoomListsResponse struct {
 	} `xml:"RoomLists"`
 }
 
-func GetRoomLists(req Requester) (*GetRoomListsResponse, error) {
+func GetRoomLists(ctx context.Context, req Requester) (*GetRoomListsResponse, error) {
 	var out GetRoomListsResponse
-	return &out, requestAndUnmarshal(req, GetRoomListsRequest{}, &out)
+	return &out, requestAndUnmarshal(ctx, req, GetRoomListsRequest{}, &out)
 }
 
 type GetRoomsRequest struct {
@@ -38,10 +39,10 @@ type GetRoomsResponse struct {
 	} `xml:"Rooms"`
 }
 
-func GetRooms(req Requester, email string) (*GetRoomsResponse, error) {
+func GetRooms(ctx context.Context, req Requester, email string) (*GetRoomsResponse, error) {
 	var in GetRoomsRequest
 	in.RoomList.EmailAddress = email
 
 	var out GetRoomsResponse
-	return &out, requestAndUnmarshal(req, in, &out)
+	return &out, requestAndUnmarshal(ctx, req, in, &out)
 }

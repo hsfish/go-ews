@@ -71,7 +71,7 @@ func FindPeople(c Requester, r *FindPeopleRequest) (*FindPeopleResponse, error) 
 		return nil, err
 	}
 
-	bb, err := c.Request(xmlBytes)
+	bb, err := c.Request(nil, xmlBytes)
 	if err != nil {
 		return nil, err
 	}

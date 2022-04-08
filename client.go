@@ -7,6 +7,7 @@ package ews
 
 import (
 	"bytes"
+	"context"
 	"encoding/xml"
 	"io/ioutil"
 	"net/http"
@@ -22,17 +23,21 @@ type Version = ewsxml.Version
 const (
 	Exchange2010     Version = "Exchange2010"
 	Exchange2013_SP1 Version = "Exchange2013_SP1"
+
+	RequestError   errors.Kind = "request error"
+	UnmarshalError errors.Kind = "unmarshal error"
 )
 
 type Requester interface {
 	// Request
 	// Argument body must be of []byte or any type that xml.Marshal
 	// successfully can handle.
-	Request(body interface{}) ([]byte, error)
+	Request(ctx context.Context, body interface{}) ([]byte, error)
 }
 
 type Client interface {
 	Requester
+	Log() Logger
 	Url() string
 	Username() string
 	Header() *ewsxml.Header
@@ -62,43 +67,47 @@ func NewClient(url string, ver Version, opts ...Option) (Client, error) {
 }
 
 type client struct {
-	log       Logger
-	http      *http.Client
-	url       string
-	basicAuth [2]string
-	dev       bool
-
+	log    Logger
+	http   *http.Client
+	url    string
+	auth   [2]string
 	header ewsxml.Header
 }
 
+func (c *client) Log() Logger { return c.log }
+
 func (c *client) Url() string { return c.url }
 
-func (c *client) Username() string { return c.basicAuth[0] }
+func (c *client) Username() string { return c.auth[0] }
 
 func (c *client) Header() *ewsxml.Header { return &c.header }
 
-func requestAndUnmarshal(client Requester, body interface{}, dest interface{}) error {
-	data, err := client.Request(body)
+func requestAndUnmarshal(ctx context.Context, req Requester, body interface{}, dest interface{}) error {
+	data, err := req.Request(ctx, body)
 	if err != nil {
 		return err
 	}
-	return errors.WithStack(xml.Unmarshal(data, dest))
+	return errors.WithKind(xml.Unmarshal(data, dest), UnmarshalError)
 }
 
-func (c *client) Request(body interface{}) ([]byte, error) {
-	req, err := c.createRequest(body)
+func (c *client) Request(ctx context.Context, body interface{}) ([]byte, error) {
+	if ctx == nil {
+		// default to context.Background() just like http.NewRequest()
+		ctx = context.Background()
+	}
+
+	req, err := c.createRequest(ctx, body)
 	if err != nil {
 		return nil, err
 	}
 
 	resp, err := c.http.Do(req)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, errors.WithKind(err, RequestError)
 	}
 	defer errors.AppendFunc(&err, resp.Body.Close)
 
 	data, err := ioutil.ReadAll(resp.Body)
-	c.log.DumpResponse(resp, data)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
@@ -109,7 +118,7 @@ func (c *client) Request(body interface{}) ([]byte, error) {
 
 	var x ewsxml.ResponseEnvelope
 	if err = xml.Unmarshal(data, &x); err != nil {
-		return data, errors.WithStack(err)
+		return data, errors.WithKind(err, UnmarshalError)
 	}
 
 	return x.Body.Response, err
@@ -126,7 +135,7 @@ const (
 	soapEnd       = `</soap:Body></soap:Envelope>`
 )
 
-func (c *client) createRequest(body interface{}) (*http.Request, error) {
+func (c *client) createRequest(ctx context.Context, body interface{}) (*http.Request, error) {
 	buf, err := xml.Marshal(c.header)
 	if err != nil {
 		return nil, errors.WithStack(err)
@@ -152,13 +161,13 @@ func (c *client) createRequest(body interface{}) (*http.Request, error) {
 
 	buf = append(buf, soapEnd...)
 
-	req, err := http.NewRequest("POST", c.Url(), bytes.NewReader(buf))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.Url(), bytes.NewReader(buf))
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
 
-	if c.basicAuth[0] != "" {
-		req.SetBasicAuth(c.basicAuth[0], c.basicAuth[1])
+	if c.auth[0] != "" {
+		req.SetBasicAuth(c.auth[0], c.auth[1])
 	}
 	req.Header.Set("Content-Type", "text/xml")
 

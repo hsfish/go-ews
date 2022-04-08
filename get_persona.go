@@ -34,7 +34,7 @@ func GetPersona(c Requester, r *GetPersonaRequest) (*GetPersonaResponse, error) 
 		return nil, err
 	}
 
-	bb, err := c.Request(xmlBytes)
+	bb, err := c.Request(nil, xmlBytes)
 	if err != nil {
 		return nil, err
 	}
