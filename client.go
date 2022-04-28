@@ -7,10 +7,10 @@ package ews
 
 import (
 	"bytes"
-	"context"
 	"encoding/xml"
 	"io/ioutil"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/Abovo-Media/go-ews/ewsxml"
@@ -30,9 +30,9 @@ const (
 
 type Requester interface {
 	// Request
-	// Argument body must be of []byte or any type that xml.Marshal
+	// Argument out must be of []byte or any type that xml.Marshal
 	// successfully can handle.
-	Request(ctx context.Context, body interface{}) ([]byte, error)
+	Request(req *Request, out interface{}) error
 }
 
 type Client interface {
@@ -40,12 +40,13 @@ type Client interface {
 	Log() Logger
 	Url() string
 	Username() string
-	Header() *ewsxml.Header
+	Do(req *Request) (*http.Response, error)
 }
 
 func NewClient(url string, ver Version, opts ...Option) (Client, error) {
 	c := &client{
 		log: NopLogger(),
+		ver: ver,
 		url: url,
 		http: &http.Client{
 			CheckRedirect: func(req *http.Request, via []*http.Request) error {
@@ -60,15 +61,14 @@ func NewClient(url string, ver Version, opts ...Option) (Client, error) {
 		errors.Append(&err, opt(c))
 	}
 
-	c.header.SetVersion(ver)
 	c.log.Server(url, ver)
-
 	return c, err
 }
 
 type client struct {
 	log    Logger
 	http   *http.Client
+	ver    Version
 	url    string
 	auth   [2]string
 	header ewsxml.Header
@@ -80,99 +80,78 @@ func (c *client) Url() string { return c.url }
 
 func (c *client) Username() string { return c.auth[0] }
 
-func (c *client) Header() *ewsxml.Header { return &c.header }
-
-func requestAndUnmarshal(ctx context.Context, req Requester, body interface{}, dest interface{}) error {
-	data, err := req.Request(ctx, body)
-	if err != nil {
-		return err
+func (c *client) Do(req *Request) (*http.Response, error) {
+	if req.head == nil {
+		req.head = new(ewsxml.Header)
 	}
-	return errors.WithKind(xml.Unmarshal(data, dest), UnmarshalError)
-}
+	req.head.SetVersion(c.ver)
 
-func (c *client) Request(ctx context.Context, body interface{}) ([]byte, error) {
-	if ctx == nil {
-		// default to context.Background() just like http.NewRequest()
-		ctx = context.Background()
-	}
-
-	req, err := c.createRequest(ctx, body)
-	if err != nil {
+	buf := getBuffer()
+	defer releaseBuffer(buf)
+	if err := req.WriteBody(buf); err != nil {
 		return nil, err
 	}
 
-	resp, err := c.http.Do(req)
-	if err != nil {
-		return nil, errors.WithKind(err, RequestError)
-	}
-	defer errors.AppendFunc(&err, resp.Body.Close)
-
-	data, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, errors.WithStack(err)
-	}
-
-	c.log.HttpResponse(resp, data)
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, NewError(resp)
-	}
-
-	var x ewsxml.ResponseEnvelope
-	if err = xml.Unmarshal(data, &x); err != nil {
-		return data, errors.WithKind(err, UnmarshalError)
-	}
-
-	return x.Body.Response, err
-}
-
-//goland:noinspection HttpUrlsUsage
-const (
-	soapStart = xml.Header + `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
-		xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
-		xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">`
-
-	soapBodyStart = `<soap:Body>`
-	soapEnd       = `</soap:Body></soap:Envelope>`
-)
-
-func (c *client) createRequest(ctx context.Context, body interface{}) (*http.Request, error) {
-	buf, err := xml.Marshal(c.header)
-	if err != nil {
-		return nil, errors.WithStack(err)
-	}
-
-	buf = append([]byte(soapStart), buf...)
-	buf = append(buf, soapBodyStart...)
-
-	switch b := body.(type) {
-	case []byte:
-		buf = append(buf, b...)
-
-	case string:
-		buf = append(buf, b...)
-
-	default:
-		if x, err := xml.Marshal(b); err != nil {
-			return nil, errors.WithStack(err)
-		} else {
-			buf = append(buf, x...)
-		}
-	}
-
-	buf = append(buf, soapEnd...)
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.Url(), bytes.NewReader(buf))
+	httpReq, err := http.NewRequestWithContext(req.Context(), http.MethodPost, c.Url(), buf)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
 
 	if c.auth[0] != "" {
-		req.SetBasicAuth(c.auth[0], c.auth[1])
+		httpReq.SetBasicAuth(c.auth[0], c.auth[1])
 	}
-	req.Header.Set("Content-Type", "text/xml")
+	httpReq.Header.Set("Content-Type", "text/xml")
 
-	c.log.HttpRequest(req, buf)
-	return req, nil
+	c.log.HttpRequest(httpReq, buf.Bytes())
+	return c.http.Do(httpReq)
+}
+
+func (c *client) Request(req *Request, out interface{}) error {
+	resp, err := c.Do(req)
+	if err != nil {
+		return err
+	}
+	defer errors.AppendFunc(&err, resp.Body.Close)
+
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	c.log.HttpResponse(resp, data)
+
+	if resp.StatusCode != http.StatusOK {
+		return NewError(resp)
+	}
+
+	var x ewsxml.ResponseEnvelope
+	if err = xml.Unmarshal(data, &x); err != nil {
+		return errors.WithKind(err, UnmarshalError)
+	}
+
+	if b, ok := out.(*[]byte); ok {
+		// skip unmarshalling, return as raw bytes
+		*b = x.Body.Response
+		return nil
+	}
+
+	return errors.WithKind(xml.Unmarshal(x.Body.Response, out), UnmarshalError)
+}
+
+var bufPool = sync.Pool{
+	New: func() interface{} {
+		var buf bytes.Buffer
+		// len(soapStart) + len(soapBodyStart) + len(soapEnd) = 347
+		buf.Grow(512)
+		return &buf
+	},
+}
+
+func getBuffer() *bytes.Buffer {
+	return bufPool.Get().(*bytes.Buffer)
+}
+
+func releaseBuffer(b *bytes.Buffer) {
+	b.Reset()
+	bufPool.Put(b)
 }

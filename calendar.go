@@ -3,42 +3,42 @@ package ews
 import (
 	"context"
 	"encoding/xml"
-	"time"
 
 	"github.com/Abovo-Media/go-ews/ewsxml"
 )
 
-type FindItemCalendarViewRequest struct {
-	ewsxml.FindItem
-	CalendarView ewsxml.CalendarView
+type FindItemCalendarViewOperation struct {
+	header   ewsxml.Header
+	FindItem struct {
+		ewsxml.FindItem
+		CalendarView ewsxml.CalendarView
 
-	// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/parentfolderids
-	ParentFolderIds struct {
-		DistinguishedFolderId ewsxml.DistinguishedFolderId `xml:"t:DistinguishedFolderId"`
-	} `xml:"m:ParentFolderIds"`
+		// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/parentfolderids
+		ParentFolderIds struct {
+			DistinguishedFolderId ewsxml.DistinguishedFolderId `xml:"t:DistinguishedFolderId"`
+		} `xml:"m:ParentFolderIds"`
+	}
 }
+
+func (op *FindItemCalendarViewOperation) Header() *ewsxml.Header { return &op.header }
+func (op *FindItemCalendarViewOperation) Body() interface{}      { return op.FindItem }
 
 type FindItemCalendarViewResponse struct {
 	XMLName          xml.Name `xml:"FindItemResponse"`
 	ResponseMessages struct {
-		FindItemResponseMessage struct {
-			ewsxml.FindItemResponseMessage
-			ewsxml.RootFolder
-		}
-	} `xml:"m:ResponseMessages"`
+		FindItemResponseMessage ewsxml.FindItemResponseMessage
+	}
 }
 
-func GetCalendars(ctx context.Context, req Requester, email string, start, end time.Time) (*FindItemCalendarViewResponse, error) {
-	var in FindItemCalendarViewRequest
-	in.Traversal = ewsxml.Traversal_Shallow
-	in.ItemShape.BaseShape = ewsxml.BaseShape_Default
-	in.ParentFolderIds.DistinguishedFolderId.Id = "calendar"
-	in.ParentFolderIds.DistinguishedFolderId.Mailbox.EmailAddress = email
-	in.CalendarView.StartDate = start
-	in.CalendarView.EndDate = end
-	in.CalendarView.MaxEntriesReturned = 10
+func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOperation) (*FindItemCalendarViewResponse, error) {
+	if op.FindItem.Traversal == "" {
+		op.FindItem.Traversal = ewsxml.Traversal_Shallow
+	}
+	if op.FindItem.ItemShape.BaseShape == "" {
+		op.FindItem.ItemShape.BaseShape = ewsxml.BaseShape_Default
+	}
+	op.FindItem.ParentFolderIds.DistinguishedFolderId.Id = "calendar"
 
 	var out FindItemCalendarViewResponse
-	err := requestAndUnmarshal(ctx, req, in, &out)
-	return &out, err
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }

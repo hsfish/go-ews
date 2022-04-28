@@ -59,8 +59,8 @@ type CreateItem struct {
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/items
 type Items struct {
 	// Item                Item                `xml:"t:Item"`
-	Message      []Message      `xml:"t:Message"`
-	CalendarItem []CalendarItem `xml:"t:CalendarItem"`
+	Message      []Message      `xml:",omitempty"`
+	CalendarItem []CalendarItem `xml:",omitempty"`
 	// Contact             Contact             `xml:"t:Contact"`
 	// DistributionList    DistributionList    `xml:"t:DistributionList"`
 	// MeetingMessage      MeetingMessage      `xml:"t:MeetingMessage"`

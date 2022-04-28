@@ -55,13 +55,14 @@ const (
 // The CalendarItem element represents an Exchange calendar item.
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/calendaritem
 type CalendarItem struct {
+	Data []byte `xml:",innerxml"`
 	// MimeContent                  string      `xml:"t:MimeContent"`
-	ItemId         ItemId `xml:"t:ItemId,omitempty"`
-	ParentFolderId ItemId `xml:"t:ParentFolderId,omitempty"`
+	ItemId         ItemId `xml:",omitempty"`
+	ParentFolderId ItemId `xml:",omitempty"`
 	// ItemClass                    string      `xml:"t:ItemClass"`
-	Subject     string      `xml:"t:Subject"`
-	Sensitivity Sensitivity `xml:"t:Sensitivity"`
-	Body        Body        `xml:"t:Body"`
+	Subject     string
+	Sensitivity Sensitivity
+	Body        Body
 	// Attachments                  string      `xml:"t:Attachments"`
 	// DateTimeReceived             string      `xml:"t:DateTimeReceived"`
 	// Size                         string      `xml:"t:Size"`
@@ -77,31 +78,31 @@ type CalendarItem struct {
 	// DateTimeCreated              string      `xml:"t:DateTimeCreated"`
 	// ResponseObjects              string      `xml:"t:ResponseObjects"`
 	// ReminderDueBy                string      `xml:"t:ReminderDueBy"`
-	ReminderIsSet              bool               `xml:"t:ReminderIsSet"`
-	ReminderMinutesBeforeStart int                `xml:"t:ReminderMinutesBeforeStart"`
-	DisplayCc                  ConcatenatedString `xml:"t:DisplayCc"`
-	DisplayTo                  ConcatenatedString `xml:"t:DisplayTo"`
-	HasAttachments             bool               `xml:"t:HasAttachments"`
+	ReminderIsSet              bool
+	ReminderMinutesBeforeStart int
+	DisplayCc                  ConcatenatedString
+	DisplayTo                  ConcatenatedString
+	HasAttachments             bool
 	// ExtendedProperty             string      `xml:"t:ExtendedProperty"`
 	// Culture                      string      `xml:"t:Culture"`
-	Start time.Time `xml:"t:Start"`
-	End   time.Time `xml:"t:End"`
+	Start time.Time
+	End   time.Time
 	// OriginalStart                string      `xml:"t:OriginalStart"`
-	IsAllDayEvent        bool                 `xml:"t:IsAllDayEvent"`
-	LegacyFreeBusyStatus LegacyFreeBusyStatus `xml:"t:LegacyFreeBusyStatus"`
-	Location             string               `xml:"t:Location"`
+	IsAllDayEvent        bool
+	LegacyFreeBusyStatus LegacyFreeBusyStatus
+	Location             string
 	// When                         string      `xml:"t:When"`
 	// IsMeeting                    string      `xml:"t:IsMeeting"`
 	// IsCancelled                  string      `xml:"t:IsCancelled"`
 	// IsRecurring                  string      `xml:"t:IsRecurring"`
 	// MeetingRequestWasSent        string      `xml:"t:MeetingRequestWasSent"`
 	// IsResponseRequested          string      `xml:"t:IsResponseRequested"`
-	CalendarItemType CalendarItemType `xml:"t:CalendarItemType"`
+	CalendarItemType CalendarItemType
 	// MyResponseType               string      `xml:"t:MyResponseType"`
-	Organizer         OneMailbox `xml:"t:Organizer"`
-	RequiredAttendees []Attendee `xml:"t:RequiredAttendees"` // []Attendees
-	OptionalAttendees []Attendee `xml:"t:OptionalAttendees"` // []Attendees
-	Resources         []Attendee `xml:"t:Resources"`         // []Attendees
+	Organizer         OneMailbox
+	RequiredAttendees []Attendee // []Attendees
+	OptionalAttendees []Attendee // []Attendees
+	Resources         []Attendee // []Attendees
 	// ConflictingMeetingCount      string      `xml:"t:ConflictingMeetingCount"`
 	// AdjacentMeetingCount         string      `xml:"t:AdjacentMeetingCount"`
 	// ConflictingMeetings          string      `xml:"t:ConflictingMeetings"`
@@ -127,7 +128,7 @@ type CalendarItem struct {
 	// EffectiveRights              string      `xml:"t:EffectiveRights"`
 	// LastModifiedName             string      `xml:"t:LastModifiedName"`
 	// LastModifiedTime             string      `xml:"t:LastModifiedTime"`
-	IsAssociated bool `xml:"t:IsAssociated"`
+	IsAssociated bool
 	// WebClientReadFormQueryString string      `xml:"t:WebClientReadFormQueryString"`
 	// WebClientEditFormQueryString string      `xml:"t:WebClientEditFormQueryString"`
 	// ConversationId               string      `xml:"t:ConversationId"`

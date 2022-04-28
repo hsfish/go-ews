@@ -8,7 +8,10 @@ import (
 )
 
 type GetRoomListsRequest struct {
-	XMLName xml.Name `xml:"m:GetRoomLists"`
+	Header ewsxml.Header
+	Body   struct {
+		XMLName xml.Name `xml:"m:GetRoomLists"`
+	}
 }
 
 type GetRoomListsResponse struct {
@@ -18,17 +21,19 @@ type GetRoomListsResponse struct {
 	} `xml:"RoomLists"`
 }
 
-func GetRoomLists(ctx context.Context, req Requester) (*GetRoomListsResponse, error) {
+func GetRoomLists(ctx context.Context, req Requester, op *GetRoomListsRequest) (*GetRoomListsResponse, error) {
 	var out GetRoomListsResponse
-	return &out, requestAndUnmarshal(ctx, req, GetRoomListsRequest{}, &out)
+	return &out, req.Request(NewRequestWithContext(ctx, &op.Header, op.Body), &out)
 }
 
-type GetRoomsRequest struct {
-	XMLName  xml.Name `xml:"m:GetRooms"`
-	RoomList struct {
-		EmailAddress string `xml:"t:EmailAddress"`
-	} `xml:"m:RoomList"`
+// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/getrooms-operation
+type GetRoomsOperation struct {
+	header   ewsxml.Header
+	GetRooms ewsxml.GetRooms
 }
+
+func (op *GetRoomsOperation) Header() *ewsxml.Header { return &op.header }
+func (op *GetRoomsOperation) Body() interface{}      { return op.GetRooms }
 
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/getroomsresponse
 type GetRoomsResponse struct {
@@ -41,10 +46,7 @@ type GetRoomsResponse struct {
 	} `xml:"Rooms>Room>Id"`
 }
 
-func GetRooms(ctx context.Context, req Requester, email string) (*GetRoomsResponse, error) {
-	var in GetRoomsRequest
-	in.RoomList.EmailAddress = email
-
+func GetRooms(ctx context.Context, req Requester, op *GetRoomsOperation) (*GetRoomsResponse, error) {
 	var out GetRoomsResponse
-	return &out, requestAndUnmarshal(ctx, req, in, &out)
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }

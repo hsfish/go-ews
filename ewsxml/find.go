@@ -115,8 +115,7 @@ type ContactsView struct {
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/finditemresponsemessage
 type FindItemResponseMessage struct {
 	Response
-	XMLName            xml.Name `xml:"m:FindItemResponseMessage"`
-	DescriptiveLinkKey int      `xml:"DescriptiveLinkKey,attr"`
+	DescriptiveLinkKey int `xml:"DescriptiveLinkKey,attr"`
 	RootFolder         RootFolder
 }
 
@@ -124,12 +123,11 @@ type FindItemResponseMessage struct {
 // folder during a FindItem operation.
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/rootfolder-finditemresponsemessage
 type RootFolder struct {
-	XMLName                 xml.Name `xml:"m:RootFolder"`
-	IndexedPagingOffset     int      `xml:"IndexedPagingOffset,attr"`
-	NumeratorOffset         int      `xml:"NumeratorOffset,attr"`
-	AbsoluteDenominator     int      `xml:"AbsoluteDenominator,attr"`
-	IncludesLastItemInRange bool     `xml:"IncludesLastItemInRange,attr"`
-	TotalItemsInView        int      `xml:"TotalItemsInView,attr"`
-	Items                   Items    `xml:"t:Items"`
+	IndexedPagingOffset     int  `xml:"IndexedPagingOffset,attr"`
+	NumeratorOffset         int  `xml:"NumeratorOffset,attr"`
+	AbsoluteDenominator     int  `xml:"AbsoluteDenominator,attr"`
+	IncludesLastItemInRange bool `xml:"IncludesLastItemInRange,attr"`
+	TotalItemsInView        int  `xml:"TotalItemsInView,attr"`
+	Items                   Items
 	// Groups
 }
