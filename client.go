@@ -1,8 +1,3 @@
-/*
-Package ews (Exchange Web Service)
-
-https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/ews-operations-in-exchange
-*/
 package ews
 
 import (
@@ -81,28 +76,29 @@ func (c *client) Url() string { return c.url }
 func (c *client) Username() string { return c.auth[0] }
 
 func (c *client) Do(req *Request) (*http.Response, error) {
-	if req.head == nil {
-		req.head = new(ewsxml.Header)
+	if req.head.RequestServerVersion.Version == "" {
+		req.head.ServerVersion(c.ver)
 	}
-	req.head.SetVersion(c.ver)
 
-	buf := getBuffer()
-	defer releaseBuffer(buf)
-	if err := req.WriteBody(buf); err != nil {
+	body := getBuffer()
+	defer releaseBuffer(body)
+	if err := req.WriteBody(body); err != nil {
 		return nil, err
 	}
 
-	httpReq, err := http.NewRequestWithContext(req.Context(), http.MethodPost, c.Url(), buf)
+	httpReq, err := http.NewRequestWithContext(req.ctx, http.MethodPost, c.Url(), body)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
 
 	if c.auth[0] != "" {
-		httpReq.SetBasicAuth(c.auth[0], c.auth[1])
+		if _, _, has := httpReq.BasicAuth(); !has {
+			httpReq.SetBasicAuth(c.auth[0], c.auth[1])
+		}
 	}
 	httpReq.Header.Set("Content-Type", "text/xml")
 
-	c.log.HttpRequest(httpReq, buf.Bytes())
+	c.log.HttpRequest(httpReq, body.Bytes())
 	return c.http.Do(httpReq)
 }
 

@@ -20,11 +20,19 @@ type Request struct {
 	body interface{}
 }
 
-func NewRequest(head *ewsxml.Header, body interface{}) *Request {
-	return NewRequestWithContext(nil, head, body)
-}
+const PanicNilBody = "body must be a non-nil value"
 
-func NewRequestWithContext(ctx context.Context, head *ewsxml.Header, body interface{}) *Request {
+func NewRequest(ctx context.Context, head *ewsxml.Header, body interface{}) *Request {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	if head == nil {
+		head = new(ewsxml.Header)
+	}
+	if body == nil {
+		panic(PanicNilBody)
+	}
+
 	return &Request{
 		ctx:  ctx,
 		head: head,
@@ -33,18 +41,11 @@ func NewRequestWithContext(ctx context.Context, head *ewsxml.Header, body interf
 }
 
 func NewOperationRequest(ctx context.Context, op Operation) *Request {
-	return NewRequestWithContext(ctx, op.Header(), op.Body())
+	return NewRequest(ctx, op.Header(), op.Body())
 }
 
 func (r *Request) Header() *ewsxml.Header { return r.head }
 func (r *Request) Body() interface{}      { return r.body }
-
-func (r *Request) Context() context.Context {
-	if r.ctx == nil {
-		r.ctx = context.Background()
-	}
-	return r.ctx
-}
 
 //goland:noinspection HttpUrlsUsage
 var (
