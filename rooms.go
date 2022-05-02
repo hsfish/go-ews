@@ -7,12 +7,15 @@ import (
 	"github.com/Abovo-Media/go-ews/ewsxml"
 )
 
-type GetRoomListsRequest struct {
-	Header ewsxml.Header
-	Body   struct {
+type GetRoomListsOperation struct {
+	header ewsxml.Header
+	body   struct {
 		XMLName xml.Name `xml:"m:GetRoomLists"`
 	}
 }
+
+func (op *GetRoomListsOperation) Header() *ewsxml.Header { return &op.header }
+func (op *GetRoomListsOperation) Body() interface{}      { return op.body }
 
 type GetRoomListsResponse struct {
 	ewsxml.Response
@@ -21,9 +24,9 @@ type GetRoomListsResponse struct {
 	} `xml:"RoomLists"`
 }
 
-func GetRoomLists(ctx context.Context, req Requester, op *GetRoomListsRequest) (*GetRoomListsResponse, error) {
+func GetRoomLists(ctx context.Context, req Requester, op *GetRoomListsOperation) (*GetRoomListsResponse, error) {
 	var out GetRoomListsResponse
-	return &out, req.Request(NewRequestWithContext(ctx, &op.Header, op.Body), &out)
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }
 
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/getrooms-operation
