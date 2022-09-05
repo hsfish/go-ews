@@ -1,6 +1,7 @@
 package ewsxml
 
 import (
+	"encoding/xml"
 	"strings"
 	"time"
 )
@@ -55,14 +56,15 @@ const (
 // The CalendarItem element represents an Exchange calendar item.
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/calendaritem
 type CalendarItem struct {
-	Data []byte `xml:",innerxml"`
+	XMLName xml.Name `xml:"CalendarItem"`
+	Data    []byte   `xml:",innerxml"`
 	// MimeContent                  string      `xml:"t:MimeContent"`
-	ItemId         ItemId `xml:",omitempty"`
-	ParentFolderId ItemId `xml:",omitempty"`
+	ItemId         *ItemId `xml:"ItemId,omitempty"`
+	ParentFolderId *ItemId `xml:",omitempty"`
 	// ItemClass                    string      `xml:"t:ItemClass"`
-	Subject     string
-	Sensitivity Sensitivity
-	Body        Body
+	Subject     string      `xml:",omitempty"`
+	Sensitivity Sensitivity `xml:",omitempty"`
+	Body        *Body       `xml:",omitempty"`
 	// Attachments                  string      `xml:"t:Attachments"`
 	// DateTimeReceived             string      `xml:"t:DateTimeReceived"`
 	// Size                         string      `xml:"t:Size"`
@@ -80,16 +82,16 @@ type CalendarItem struct {
 	// ReminderDueBy                string      `xml:"t:ReminderDueBy"`
 	ReminderIsSet              bool
 	ReminderMinutesBeforeStart int
-	DisplayCc                  ConcatenatedString
-	DisplayTo                  ConcatenatedString
-	HasAttachments             bool
+	DisplayCc                  ConcatenatedString `xml:",omitempty"`
+	DisplayTo                  ConcatenatedString `xml:",omitempty"`
+	HasAttachments             bool               `xml:",omitempty"`
 	// ExtendedProperty             string      `xml:"t:ExtendedProperty"`
 	// Culture                      string      `xml:"t:Culture"`
 	Start time.Time
 	End   time.Time
 	// OriginalStart                string      `xml:"t:OriginalStart"`
 	IsAllDayEvent        bool
-	LegacyFreeBusyStatus LegacyFreeBusyStatus
+	LegacyFreeBusyStatus LegacyFreeBusyStatus `xml:",omitempty"`
 	Location             string
 	// When                         string      `xml:"t:When"`
 	// IsMeeting                    string      `xml:"t:IsMeeting"`
@@ -99,10 +101,10 @@ type CalendarItem struct {
 	// IsResponseRequested          string      `xml:"t:IsResponseRequested"`
 	CalendarItemType CalendarItemType
 	// MyResponseType               string      `xml:"t:MyResponseType"`
-	Organizer         OneMailbox
-	RequiredAttendees []Attendee // []Attendees
-	OptionalAttendees []Attendee // []Attendees
-	Resources         []Attendee // []Attendees
+	Organizer         *OneMailbox `xml:",omitempty"`
+	RequiredAttendees []Attendee  // []Attendees
+	OptionalAttendees []Attendee  // []Attendees
+	Resources         []Attendee  // []Attendees
 	// ConflictingMeetingCount      string      `xml:"t:ConflictingMeetingCount"`
 	// AdjacentMeetingCount         string      `xml:"t:AdjacentMeetingCount"`
 	// ConflictingMeetings          string      `xml:"t:ConflictingMeetings"`
@@ -120,8 +122,8 @@ type CalendarItem struct {
 	// MeetingTimeZone              string      `xml:"t:MeetingTimeZone"`
 	// StartTimeZone                string      `xml:"t:StartTimeZone"`
 	// EndTimeZone                  string      `xml:"t:EndTimeZone"`
-	StartTimeZoneId string
-	EndTimeZoneId   string
+	StartTimeZoneId string `xml:",omitempty"`
+	EndTimeZoneId   string `xml:",omitempty"`
 	// ConferenceType               string      `xml:"t:ConferenceType"`
 	// AllowNewTimeProposal         string      `xml:"t:AllowNewTimeProposal"`
 	// IsOnlineMeeting              string      `xml:"t:IsOnlineMeeting"`
@@ -130,7 +132,7 @@ type CalendarItem struct {
 	// EffectiveRights              string      `xml:"t:EffectiveRights"`
 	// LastModifiedName             string      `xml:"t:LastModifiedName"`
 	// LastModifiedTime             string      `xml:"t:LastModifiedTime"`
-	IsAssociated bool
+	IsAssociated bool `xml:",omitempty"`
 	// WebClientReadFormQueryString string      `xml:"t:WebClientReadFormQueryString"`
 	// WebClientEditFormQueryString string      `xml:"t:WebClientEditFormQueryString"`
 	// ConversationId               string      `xml:"t:ConversationId"`

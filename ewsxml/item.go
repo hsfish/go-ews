@@ -52,15 +52,16 @@ type CreateItem struct {
 	XMLName                xml.Name           `xml:"m:CreateItem"`
 	MessageDisposition     MessageDisposition `xml:"MessageDisposition,attr"`
 	SendMeetingInvitations string             `xml:"SendMeetingInvitations,attr"`
-	SavedItemFolderId      SavedItemFolderId
-	Items                  Items
+	SavedItemFolderId      *SavedItemFolderId `xml:",omitempty"`
+	Items                  MessageItems
 }
 
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/items
 type Items struct {
 	// Item                Item                `xml:"t:Item"`
-	Message      []Message      `xml:",omitempty"`
-	CalendarItem []CalendarItem `xml:",omitempty"`
+	XMLName      xml.Name  `xml:"Items"`
+	Message      []Message `xml:",omitempty"`
+	CalendarItem []CalendarItem
 	// Contact             Contact             `xml:"t:Contact"`
 	// DistributionList    DistributionList    `xml:"t:DistributionList"`
 	// MeetingMessage      MeetingMessage      `xml:"t:MeetingMessage"`
@@ -69,6 +70,18 @@ type Items struct {
 	// MeetingCancellation MeetingCancellation `xml:"t:MeetingCancellation"`
 	// Task                Task                `xml:"t:Task"`
 	// PostItem            PostItem            `xml:"t:PostItem"`
+}
+
+// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/items
+type MessageItems struct {
+	XMLName      xml.Name  `xml:"m:Items"`
+	Message      []Message `xml:",omitempty"`
+	CalendarItem []SendCalendarItem
+}
+
+type SendCalendarItem struct {
+	XMLName xml.Name `xml:"t:CalendarItem"`
+	CalendarItem
 }
 
 type SendItem struct {
