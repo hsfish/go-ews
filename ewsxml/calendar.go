@@ -120,6 +120,8 @@ type CalendarItem struct {
 	// MeetingTimeZone              string      `xml:"t:MeetingTimeZone"`
 	// StartTimeZone                string      `xml:"t:StartTimeZone"`
 	// EndTimeZone                  string      `xml:"t:EndTimeZone"`
+	StartTimeZoneId string
+	EndTimeZoneId   string
 	// ConferenceType               string      `xml:"t:ConferenceType"`
 	// AllowNewTimeProposal         string      `xml:"t:AllowNewTimeProposal"`
 	// IsOnlineMeeting              string      `xml:"t:IsOnlineMeeting"`
