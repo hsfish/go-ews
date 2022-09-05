@@ -77,11 +77,14 @@ type MessageItems struct {
 	XMLName      xml.Name  `xml:"m:Items"`
 	Message      []Message `xml:",omitempty"`
 	CalendarItem []SendCalendarItem
-}
-
-type SendCalendarItem struct {
-	XMLName xml.Name `xml:"t:CalendarItem"`
-	CalendarItem
+	// Contact             Contact             `xml:"t:Contact"`
+	// DistributionList    DistributionList    `xml:"t:DistributionList"`
+	// MeetingMessage      MeetingMessage      `xml:"t:MeetingMessage"`
+	// MeetingRequest      MeetingRequest      `xml:"t:MeetingRequest"`
+	// MeetingResponse     MeetingResponse     `xml:"t:MeetingResponse"`
+	// MeetingCancellation MeetingCancellation `xml:"t:MeetingCancellation"`
+	// Task                Task                `xml:"t:Task"`
+	// PostItem            PostItem            `xml:"t:PostItem"`
 }
 
 type SendItem struct {
