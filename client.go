@@ -8,8 +8,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Abovo-Media/go-ews/ewsxml"
 	"github.com/go-pogo/errors"
+	"github.com/soft-stech/go-ews/ewsxml"
 )
 
 type Version = ewsxml.Version

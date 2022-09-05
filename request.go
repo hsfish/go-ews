@@ -5,8 +5,8 @@ import (
 	"encoding/xml"
 	"io"
 
-	"github.com/Abovo-Media/go-ews/ewsxml"
 	"github.com/go-pogo/errors"
+	"github.com/soft-stech/go-ews/ewsxml"
 )
 
 type Operation interface {

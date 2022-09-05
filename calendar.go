@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/xml"
 
-	"github.com/Abovo-Media/go-ews/ewsxml"
+	"github.com/soft-stech/go-ews/ewsxml"
 )
 
 type FindItemCalendarViewOperation struct {

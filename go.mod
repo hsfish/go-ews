@@ -1,4 +1,4 @@
-module github.com/Abovo-Media/go-ews
+module github.com/soft-stech/go-ews
 
 go 1.14
 
