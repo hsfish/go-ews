@@ -96,6 +96,8 @@ type SendItem struct {
 }
 
 type ItemIds struct {
+	XMLName xml.Name `xml:"m:ItemIds"`
+	ItemId  []ItemId `xml:"t:ItemId"`
 }
 
 // The ItemId element contains the unique identifier and change key of an item

@@ -49,6 +49,22 @@ type CreateCalendarItemsResponse struct {
 func (op *CreateItemCalendarItemsOperation) Header() *ewsxml.Header { return &op.header }
 func (op *CreateItemCalendarItemsOperation) Body() interface{}      { return op.CreateItem }
 
+type GetItemCalendarItemsOperation struct {
+	header  ewsxml.Header
+	GetItem ewsxml.GetItem
+}
+
+type GetItemCalendarItemsResponse struct {
+	XMLName          xml.Name `xml:"GetItemResponse"`
+	ResponseMessages struct {
+		XMLName                xml.Name `xml:"ResponseMessages"`
+		GetItemResponseMessage ewsxml.GetItemResponseMessage
+	}
+}
+
+func (op *GetItemCalendarItemsOperation) Header() *ewsxml.Header { return &op.header }
+func (op *GetItemCalendarItemsOperation) Body() interface{}      { return op.GetItem }
+
 func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOperation) (*FindItemCalendarViewResponse, error) {
 	if op.FindItem.Traversal == "" {
 		op.FindItem.Traversal = ewsxml.Traversal_Shallow
@@ -68,5 +84,13 @@ func CreateCalendarItems(ctx context.Context, req Requester, op *CreateItemCalen
 	}
 
 	var out CreateCalendarItemsResponse
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
+}
+
+func GetCalendarItems(ctx context.Context, req Requester, op *GetItemCalendarItemsOperation) (*GetItemCalendarItemsResponse, error) {
+	if op.GetItem.ItemShape.BaseShape == "" {
+		op.GetItem.ItemShape.BaseShape = ewsxml.BaseShape_AllProperties
+	}
+	var out GetItemCalendarItemsResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }
