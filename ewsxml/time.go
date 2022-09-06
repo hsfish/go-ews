@@ -1,6 +1,7 @@
 package ewsxml
 
 import (
+	"encoding/xml"
 	"fmt"
 	"time"
 )
@@ -23,6 +24,16 @@ type TimeZoneTime struct {
 	Month     int16  `xml:"t:Month"`
 	DayOfWeek string `xml:"t:DayOfWeek"`
 	Year      string `xml:"Year,omitempty"`
+}
+
+type TimeZoneContext struct {
+	XMLName            xml.Name `xml:"t:TimeZoneContext"`
+	TimeZoneDefinition *TimeZoneDefinition
+}
+
+type TimeZoneDefinition struct {
+	XMLName xml.Name `xml:"t:TimeZoneDefinition"`
+	Id      string   `xml:"Id,attr,omitempty"`
 }
 
 type Time string

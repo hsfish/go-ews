@@ -12,6 +12,7 @@ type Header struct {
 	XMLName               xml.Name               `xml:"soap:Header"`
 	RequestServerVersion  RequestServerVersion   `xml:"t:RequestServerVersion"`
 	ExchangeImpersonation *ExchangeImpersonation `xml:"t:ExchangeImpersonation,omitempty"`
+	TimeZoneContext       *TimeZoneContext       `xml:",omitempty"`
 }
 
 func (h *Header) ServerVersion(ver Version) {
