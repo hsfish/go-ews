@@ -65,6 +65,24 @@ type GetItemCalendarItemsResponse struct {
 func (op *GetItemCalendarItemsOperation) Header() *ewsxml.Header { return &op.header }
 func (op *GetItemCalendarItemsOperation) Body() interface{}      { return op.GetItem }
 
+type UpdateCalendarItemsOperation struct {
+	header     ewsxml.Header
+	UpdateItem struct {
+		ewsxml.UpdateItem
+	}
+}
+
+type UpdateCalendarItemResponse struct {
+	XMLName          xml.Name `xml:"UpdateItemResponse"`
+	ResponseMessages struct {
+		XMLName                   xml.Name `xml:"ResponseMessages"`
+		UpdateItemResponseMessage ewsxml.UpdateItemResponseMessage
+	}
+}
+
+func (op *UpdateCalendarItemsOperation) Header() *ewsxml.Header { return &op.header }
+func (op *UpdateCalendarItemsOperation) Body() interface{}      { return op.UpdateItem }
+
 func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOperation) (*FindItemCalendarViewResponse, error) {
 	if op.FindItem.Traversal == "" {
 		op.FindItem.Traversal = ewsxml.Traversal_Shallow
@@ -92,5 +110,21 @@ func GetCalendarItems(ctx context.Context, req Requester, op *GetItemCalendarIte
 		op.GetItem.ItemShape.BaseShape = ewsxml.BaseShape_AllProperties
 	}
 	var out GetItemCalendarItemsResponse
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
+}
+
+func UpdateCalendarItems(ctx context.Context, req Requester, op *UpdateCalendarItemsOperation) (*UpdateCalendarItemResponse, error) {
+	if op.UpdateItem.SendMeetingInvitationsOrCancellations == "" {
+		op.UpdateItem.SendMeetingInvitationsOrCancellations = ewsxml.SendMeetingInvitationsOrCancellations_SendToNone
+	}
+
+	if op.UpdateItem.ConflictResolution == "" {
+		op.UpdateItem.ConflictResolution = ewsxml.ConflictResolution_AutoResolve
+	}
+
+	if op.UpdateItem.MessageDisposition == "" {
+		op.UpdateItem.MessageDisposition = ewsxml.MessageDisposition_SaveOnly
+	}
+	var out UpdateCalendarItemResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }

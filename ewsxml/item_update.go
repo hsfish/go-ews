@@ -55,21 +55,59 @@ type UpdateItem struct {
 	SendMeetingInvitationsOrCancellations SendMeetingInvitationsOrCancellations `xml:"SendMeetingInvitationsOrCancellations,attr"`
 	SuppressReadReceipts                  bool                                  `xml:"SuppressReadReceipts,attr"`
 
-	SavedItemFolderId SavedItemFolderId
-	ItemChanges       []ItemChange `xml:"m:ItemChanges"`
+	SavedItemFolderId *SavedItemFolderId
+	ItemChanges       *ItemChanges
+}
+
+// The ItemChanges element contains an array of ItemChange elements that identify items and
+// and the updates to apply to the items.
+// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/itemchanges
+type ItemChanges struct {
+	XMLName    xml.Name `xml:"m:ItemChanges"`
+	ItemChange []ItemChange
 }
 
 // The ItemChange element contains an item identifier and the updates to apply
 // to the item.
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/itemchange
 type ItemChange struct {
-	XMLName               xml.Name `xml:"m:ItemChange"`
-	ItemId                ItemId
-	OccurrenceItemId      OccurrenceItemId
-	RecurringMasterItemId RecurringMasterItemId
+	XMLName               xml.Name `xml:"t:ItemChange"`
+	ItemId                SendItemId
+	OccurrenceItemId      *OccurrenceItemId
+	RecurringMasterItemId *RecurringMasterItemId
 	Updates               Updates
+}
+
+type SendItemId struct {
+	XMLName   xml.Name `xml:"t:ItemId"`
+	Id        string   `xml:"Id,attr"`
+	ChangeKey string   `xml:"ChangeKey,attr,omitempty"`
 }
 
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/updates-item
 type Updates struct {
+	XMLName      xml.Name `xml:"t:Updates"`
+	SetItemField []SetItemField
+}
+
+// The UpdateItemResponseMessage element contains the status and result
+// of a single UpdateItem operation request.
+// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/updateitemresponsemessage
+type UpdateItemResponseMessage struct {
+	XMLName xml.Name `xml:"UpdateItemResponseMessage"`
+	Response
+	Items Items
+}
+
+// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/setitemfield
+type SetItemField struct {
+	XMLName      xml.Name `xml:"t:SetItemField"`
+	FieldURI     FieldURI
+	CalendarItem *SendCalendarItem
+}
+
+// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/fielduri
+type FieldURI struct {
+	XMLName  xml.Name `xml:"t:FieldURI"`
+	FieldURI string   `xml:"FieldURI,attr"`
 }
