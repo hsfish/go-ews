@@ -36,6 +36,18 @@ type TimeZoneDefinition struct {
 	Id      string   `xml:"Id,attr,omitempty"`
 }
 
+// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/starttimezone
+type StartTimeZone struct {
+	XMLName xml.Name `xml:"t:StartTimeZone"`
+	Id      string   `xml:"Id,attr,omitempty"`
+}
+
+// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/endtimezone
+type EndTimeZone struct {
+	XMLName xml.Name `xml:"t:EndTimeZone"`
+	Id      string   `xml:"Id,attr,omitempty"`
+}
+
 type Time string
 
 func (t Time) ToTime() (time.Time, error) {
