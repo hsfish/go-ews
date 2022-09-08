@@ -140,13 +140,14 @@ type CalendarItem struct {
 }
 type SendCalendarItem struct {
 	XMLName         xml.Name   `xml:"t:CalendarItem"`
-	Subject         string     `xml:"t:Subject,omitempty"`
+	Subject         *string    `xml:"t:Subject,omitempty"`
 	Start           *time.Time `xml:"t:Start,omitempty"`
 	End             *time.Time `xml:"t:End,omitempty"`
-	StartTimeZoneId string     `xml:"t:StartTimeZoneId,omitempty"`
-	EndTimeZoneId   string     `xml:"t:EndTimeZoneId,omitempty"`
-	IsAllDayEvent   bool       `xml:"t:IsAllDayEvent,omitempty"`
-	Location        string     `xml:"t:Location,omitempty"`
+	StartTimeZoneId *string    `xml:"t:StartTimeZoneId,omitempty"`
+	EndTimeZoneId   *string    `xml:"t:EndTimeZoneId,omitempty"`
+	IsAllDayEvent   *bool      `xml:"t:IsAllDayEvent,omitempty"`
+	Location        *string    `xml:"t:Location,omitempty"`
+	Body            *Body
 }
 
 // ConcatenatedString represents the concatenated display string that is used
