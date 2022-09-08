@@ -45,14 +45,12 @@ const (
 // The Mailbox element identifies a mail-enabled Active Directory object.
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/mailbox
 type Mailbox struct {
-	Name         string      `xml:"t:Name"`
-	EmailAddress string      `xml:"t:EmailAddress"`
-	RoutingType  RoutingType `xml:"t:RoutingType,omitempty"`
-	MailboxType  MailboxType `xml:"t:MailboxType,omitempty"`
-	ItemId       ItemId      `xml:"t:ItemId,omitempty"`
+	Name         string      `xml:"Name"`
+	EmailAddress string      `xml:"EmailAddress"`
+	RoutingType  RoutingType `xml:"RoutingType,omitempty"`
+	MailboxType  MailboxType `xml:"MailboxType,omitempty"`
+	ItemId       ItemId      `xml:"ItemId,omitempty"`
 }
-
-// <t:Id><t:Name>Ruimte 1e client services @Abovo Media</t:Name><t:EmailAddress>ruimte1eclientservices@abovo.nl</t:EmailAddress><t:RoutingType>SMTP</t:RoutingType><t:MailboxType>Mailbox</t:MailboxType></t:Id>
 
 // OneMailbox is a wrapper with only a single Mailbox element inside.
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/sender
@@ -61,6 +59,16 @@ type OneMailbox struct {
 }
 
 type Attendee struct {
-	XMLName xml.Name `xml:"t:Attendee"`
+	XMLName xml.Name `xml:"Attendee"`
 	Mailbox Mailbox
+}
+
+type RequiredAttendees struct {
+	XMLName  xml.Name `xml:"RequiredAttendees"`
+	Attendee []Attendee
+}
+
+type OptionalAttendees struct {
+	XMLName  xml.Name `xml:"OptionalAttendees"`
+	Attendee []Attendee
 }

@@ -94,17 +94,17 @@ type CalendarItem struct {
 	LegacyFreeBusyStatus LegacyFreeBusyStatus `xml:",omitempty"`
 	Location             string
 	// When                         string      `xml:"t:When"`
-	// IsMeeting                    string      `xml:"t:IsMeeting"`
-	// IsCancelled                  string      `xml:"t:IsCancelled"`
-	// IsRecurring                  string      `xml:"t:IsRecurring"`
+	IsMeeting   string
+	IsCancelled string
+	IsRecurring string
 	// MeetingRequestWasSent        string      `xml:"t:MeetingRequestWasSent"`
 	// IsResponseRequested          string      `xml:"t:IsResponseRequested"`
 	CalendarItemType CalendarItemType
 	// MyResponseType               string      `xml:"t:MyResponseType"`
 	Organizer         *OneMailbox `xml:",omitempty"`
-	RequiredAttendees []Attendee  // []Attendees
-	OptionalAttendees []Attendee  // []Attendees
-	Resources         []Attendee  // []Attendees
+	RequiredAttendees *RequiredAttendees
+	OptionalAttendees *OptionalAttendees
+	Resources         []Attendee // []Attendees
 	// ConflictingMeetingCount      string      `xml:"t:ConflictingMeetingCount"`
 	// AdjacentMeetingCount         string      `xml:"t:AdjacentMeetingCount"`
 	// ConflictingMeetings          string      `xml:"t:ConflictingMeetings"`
