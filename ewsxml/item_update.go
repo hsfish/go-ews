@@ -90,6 +90,30 @@ type SendBody struct {
 	Contents []byte   `xml:",chardata"`
 }
 
+type SendMailbox struct {
+	XMLName      xml.Name     `xml:"t:Mailbox"`
+	Name         string       `xml:"t:Name"`
+	EmailAddress string       `xml:"t:EmailAddress"`
+	RoutingType  *RoutingType `xml:"t:RoutingType,omitempty"`
+	MailboxType  *MailboxType `xml:"t:MailboxType,omitempty"`
+	ItemId       *ItemId      `xml:"t:ItemId,omitempty"`
+}
+
+type SendAttendee struct {
+	XMLName xml.Name `xml:"t:Attendee"`
+	Mailbox SendMailbox
+}
+
+type SendRequiredAttendees struct {
+	XMLName  xml.Name `xml:"t:RequiredAttendees"`
+	Attendee []SendAttendee
+}
+
+type SendOptionalAttendees struct {
+	XMLName  xml.Name `xml:"t:OptionalAttendees"`
+	Attendee []SendAttendee
+}
+
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/updates-item
 type Updates struct {
 	XMLName      xml.Name `xml:"t:Updates"`
