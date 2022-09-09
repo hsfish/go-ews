@@ -94,9 +94,9 @@ type CalendarItem struct {
 	LegacyFreeBusyStatus LegacyFreeBusyStatus `xml:",omitempty"`
 	Location             string
 	// When                         string      `xml:"t:When"`
-	IsMeeting   string
-	IsCancelled string
-	IsRecurring string
+	IsMeeting   bool
+	IsCancelled bool
+	IsRecurring bool
 	// MeetingRequestWasSent        string      `xml:"t:MeetingRequestWasSent"`
 	// IsResponseRequested          string      `xml:"t:IsResponseRequested"`
 	CalendarItemType CalendarItemType
