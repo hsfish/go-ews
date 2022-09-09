@@ -89,7 +89,7 @@ type DeleteItemCalendarItemsOperation struct {
 }
 
 type DeleteItemCalendarItemsResponse struct {
-	XMLName          xml.Name `xml:"GetItemResponse"`
+	XMLName          xml.Name `xml:"DeleteItemResponse"`
 	ResponseMessages struct {
 		XMLName                   xml.Name `xml:"ResponseMessages"`
 		DeleteItemResponseMessage ewsxml.DeleteItemResponseMessage
