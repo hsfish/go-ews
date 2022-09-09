@@ -84,6 +84,12 @@ type SendItemId struct {
 	ChangeKey string   `xml:"ChangeKey,attr,omitempty"`
 }
 
+type SendBody struct {
+	XMLName  xml.Name `xml:"t:Body"`
+	BodyType BodyType `xml:"BodyType,attr"`
+	Contents []byte   `xml:",chardata"`
+}
+
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/updates-item
 type Updates struct {
 	XMLName      xml.Name `xml:"t:Updates"`

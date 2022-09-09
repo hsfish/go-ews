@@ -147,7 +147,7 @@ type SendCalendarItem struct {
 	EndTimeZone   *EndTimeZone
 	IsAllDayEvent *bool   `xml:"t:IsAllDayEvent,omitempty"`
 	Location      *string `xml:"t:Location,omitempty"`
-	Body          *Body
+	Body          *SendBody
 }
 
 // ConcatenatedString represents the concatenated display string that is used
