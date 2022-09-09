@@ -64,7 +64,7 @@ const (
 // The Body element specifies the body of an item.
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/body
 type Body struct {
-	XMLName     xml.Name `xml:"t:Body"`
+	XMLName     xml.Name `xml:"Body"`
 	BodyType    BodyType `xml:"BodyType,attr"`
 	IsTruncated bool     `xml:"IsTruncated,attr"`
 	Contents    []byte   `xml:",chardata"`
