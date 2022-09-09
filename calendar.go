@@ -83,6 +83,22 @@ type UpdateCalendarItemResponse struct {
 func (op *UpdateCalendarItemsOperation) Header() *ewsxml.Header { return &op.header }
 func (op *UpdateCalendarItemsOperation) Body() interface{}      { return op.UpdateItem }
 
+type DeleteItemCalendarItemsOperation struct {
+	header     ewsxml.Header
+	DeleteItem ewsxml.DeleteItem
+}
+
+type DeleteItemCalendarItemsResponse struct {
+	XMLName          xml.Name `xml:"GetItemResponse"`
+	ResponseMessages struct {
+		XMLName                   xml.Name `xml:"ResponseMessages"`
+		DeleteItemResponseMessage ewsxml.DeleteItemResponseMessage
+	}
+}
+
+func (op *DeleteItemCalendarItemsOperation) Header() *ewsxml.Header { return &op.header }
+func (op *DeleteItemCalendarItemsOperation) Body() interface{}      { return op.DeleteItem }
+
 func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOperation) (*FindItemCalendarViewResponse, error) {
 	if op.FindItem.Traversal == "" {
 		op.FindItem.Traversal = ewsxml.Traversal_Shallow
@@ -126,5 +142,17 @@ func UpdateCalendarItems(ctx context.Context, req Requester, op *UpdateCalendarI
 		op.UpdateItem.MessageDisposition = ewsxml.MessageDisposition_SaveOnly
 	}
 	var out UpdateCalendarItemResponse
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
+}
+
+func DeleteCalendarItems(ctx context.Context, req Requester, op *DeleteItemCalendarItemsOperation) (*DeleteItemCalendarItemsResponse, error) {
+	if op.DeleteItem.DeleteType == "" {
+		op.DeleteItem.DeleteType = ewsxml.DeleteType_MoveToDeletedItems
+	}
+
+	if op.DeleteItem.SendMeetingCancellations == "" {
+		op.DeleteItem.SendMeetingCancellations = ewsxml.SendMeetingCancellations_SendToAllAndSaveCopy
+	}
+	var out DeleteItemCalendarItemsResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }
