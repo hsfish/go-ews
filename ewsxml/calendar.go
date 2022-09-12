@@ -114,7 +114,7 @@ type CalendarItem struct {
 	// AppointmentReplyTime         string      `xml:"t:AppointmentReplyTime"`
 	// AppointmentSequenceNumber    string      `xml:"t:AppointmentSequenceNumber"`
 	// AppointmentState             string      `xml:"t:AppointmentState"`
-	// Recurrence                   string      `xml:"t:Recurrence"`
+	Recurrence *Recurrence
 	// FirstOccurrence              string      `xml:"t:FirstOccurrence"`
 	// LastOccurrence               string      `xml:"t:LastOccurrence"`
 	// ModifiedOccurrences          string      `xml:"t:ModifiedOccurrences"`
@@ -150,6 +150,7 @@ type SendCalendarItem struct {
 	Body              *SendBody
 	RequiredAttendees *SendRequiredAttendees
 	OptionalAttendees *SendOptionalAttendees
+	Recurrence        *SendRecurrence
 }
 
 // ConcatenatedString represents the concatenated display string that is used
