@@ -62,13 +62,13 @@ type RelativeYearlyRecurrence struct {
 }
 
 type EndDateRecurrence struct {
-	XMLName   xml.Name `xml:"NumberedRecurrence"`
+	XMLName   xml.Name `xml:"EndDateRecurrence"`
 	StartDate string   `xml:"StartDate"`
 	EndDate   string   `xml:"EndDate"`
 }
 
 type NoEndRecurrence struct {
-	XMLName   xml.Name `xml:"NumberedRecurrence"`
+	XMLName   xml.Name `xml:"NoEndRecurrence"`
 	StartDate string   `xml:"StartDate"`
 }
 
