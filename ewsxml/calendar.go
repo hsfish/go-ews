@@ -56,9 +56,9 @@ const (
 // The CalendarItem element represents an Exchange calendar item.
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/calendaritem
 type CalendarItem struct {
-	XMLName xml.Name `xml:"CalendarItem"`
-	Data    []byte   `xml:",innerxml"`
-	// MimeContent                  string      `xml:"t:MimeContent"`
+	XMLName        xml.Name `xml:"CalendarItem"`
+	Data           []byte   `xml:",innerxml"`
+	MimeContent    string
 	ItemId         *ItemId `xml:"ItemId,omitempty"`
 	ParentFolderId *ItemId `xml:",omitempty"`
 	// ItemClass                    string      `xml:"t:ItemClass"`
