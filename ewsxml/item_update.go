@@ -84,6 +84,12 @@ type SendItemId struct {
 	ChangeKey string   `xml:"ChangeKey,attr,omitempty"`
 }
 
+type ReferenceItemId struct {
+	XMLName   xml.Name `xml:"t:ReferenceItemId"`
+	Id        string   `xml:"Id,attr"`
+	ChangeKey string   `xml:"ChangeKey,attr,omitempty"`
+}
+
 type SendBody struct {
 	XMLName  xml.Name `xml:"t:Body"`
 	BodyType BodyType `xml:"BodyType,attr"`

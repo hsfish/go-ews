@@ -74,9 +74,10 @@ type Items struct {
 
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/items
 type MessageItems struct {
-	XMLName      xml.Name  `xml:"m:Items"`
-	Message      []Message `xml:",omitempty"`
-	CalendarItem []SendCalendarItem
+	XMLName            xml.Name                 `xml:"m:Items"`
+	Message            []Message                `xml:",omitempty"`
+	CalendarItem       []SendCalendarItem       `xml:",omitempty"`
+	CancelCalendarItem []SendCancelCalendarItem `xml:",omitempty"`
 	// Contact             Contact             `xml:"t:Contact"`
 	// DistributionList    DistributionList    `xml:"t:DistributionList"`
 	// MeetingMessage      MeetingMessage      `xml:"t:MeetingMessage"`
