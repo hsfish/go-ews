@@ -97,8 +97,10 @@ type SendItem struct {
 }
 
 type ItemIds struct {
-	XMLName xml.Name `xml:"m:ItemIds"`
-	ItemId  []ItemId `xml:"t:ItemId"`
+	XMLName               xml.Name `xml:"m:ItemIds"`
+	ItemId                []ItemId `xml:"t:ItemId"`
+	OccurrenceItemId      []OccurrenceItemId
+	RecurringMasterItemId []RecurringMasterItemId
 }
 
 // The ItemId element contains the unique identifier and change key of an item
@@ -113,7 +115,7 @@ type ItemId struct {
 // item.
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/occurrenceitemid
 type OccurrenceItemId struct {
-	XMLName           xml.Name `xml:"m:OccurrenceItemId"`
+	XMLName           xml.Name `xml:"t:OccurrenceItemId"`
 	RecurringMasterId string   `xml:"RecurringMasterId,attr"`
 	ChangeKey         string   `xml:"ChangeKey,attr"`
 	InstanceIndex     uint     `xml:"InstanceIndex,attr"`
@@ -123,7 +125,7 @@ type OccurrenceItemId struct {
 // identifying the identifiers of one of its related occurrence items.
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/recurringmasteritemid
 type RecurringMasterItemId struct {
-	XMLName      xml.Name `xml:"m:RecurringMasterItemId"`
+	XMLName      xml.Name `xml:"t:RecurringMasterItemId"`
 	OccurrenceId string   `xml:"OccurrenceId,attr"`
 	ChangeKey    string   `xml:"ChangeKey,attr,omitempty"`
 }
