@@ -56,3 +56,10 @@ func WithDefaultTransport(skipTls bool) Option {
 func WithNTLM(skipTls bool) Option {
 	return WithTransport(new(ntlmssp.Negotiator))
 }
+
+func WithExchangeImpersonation(v string) Option {
+	return func(c *client) error {
+		c.header.ImpersonateSmtpAddress(v)
+		return nil
+	}
+}

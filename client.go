@@ -80,6 +80,10 @@ func (c *client) Do(req *Request) (*http.Response, error) {
 		req.head.ServerVersion(c.ver)
 	}
 
+	if req.head.ExchangeImpersonation == nil {
+		req.head.ExchangeImpersonation = c.header.ExchangeImpersonation
+	}
+
 	body := getBuffer()
 	defer releaseBuffer(body)
 	if err := req.WriteBody(body); err != nil {
