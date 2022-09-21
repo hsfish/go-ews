@@ -101,7 +101,7 @@ type CalendarItem struct {
 	// IsResponseRequested          string      `xml:"t:IsResponseRequested"`
 	CalendarItemType CalendarItemType
 	// MyResponseType               string      `xml:"t:MyResponseType"`
-	Organizer         *OneMailbox `xml:",omitempty"`
+	Organizer         *Organizer
 	RequiredAttendees *RequiredAttendees
 	OptionalAttendees *OptionalAttendees
 	Resources         []Attendee // []Attendees

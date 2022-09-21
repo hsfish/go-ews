@@ -72,3 +72,8 @@ type OptionalAttendees struct {
 	XMLName  xml.Name `xml:"OptionalAttendees"`
 	Attendee []Attendee
 }
+
+type Organizer struct {
+	XMLName xml.Name `xml:"Organizer"`
+	Mailbox Mailbox
+}
