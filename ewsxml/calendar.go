@@ -65,7 +65,6 @@ type CalendarItem struct {
 	Subject     string      `xml:",omitempty"`
 	Sensitivity Sensitivity `xml:",omitempty"`
 	Body        *Body       `xml:",omitempty"`
-	// Attachments                  string      `xml:"t:Attachments"`
 	// DateTimeReceived             string      `xml:"t:DateTimeReceived"`
 	// Size                         string      `xml:"t:Size"`
 	// Categories                   string      `xml:"t:Categories"`
@@ -84,7 +83,8 @@ type CalendarItem struct {
 	ReminderMinutesBeforeStart int
 	DisplayCc                  ConcatenatedString `xml:",omitempty"`
 	DisplayTo                  ConcatenatedString `xml:",omitempty"`
-	HasAttachments             bool               `xml:",omitempty"`
+	Attachments                *Attachments
+	HasAttachments             bool
 	// ExtendedProperty             string      `xml:"t:ExtendedProperty"`
 	// Culture                      string      `xml:"t:Culture"`
 	Start time.Time
