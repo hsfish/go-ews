@@ -50,8 +50,8 @@ type SavedItemFolderId struct {
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/createitem
 type CreateItem struct {
 	XMLName                xml.Name           `xml:"m:CreateItem"`
-	MessageDisposition     MessageDisposition `xml:"MessageDisposition,attr"`
-	SendMeetingInvitations string             `xml:"SendMeetingInvitations,attr"`
+	MessageDisposition     MessageDisposition `xml:"MessageDisposition,attr,omitempty"`
+	SendMeetingInvitations string             `xml:"SendMeetingInvitations,attr,omitempty"`
 	SavedItemFolderId      *SavedItemFolderId `xml:",omitempty"`
 	Items                  MessageItems
 }
@@ -74,10 +74,13 @@ type Items struct {
 
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/items
 type MessageItems struct {
-	XMLName            xml.Name                 `xml:"m:Items"`
-	Message            []Message                `xml:",omitempty"`
-	CalendarItem       []SendCalendarItem       `xml:",omitempty"`
-	CancelCalendarItem []SendCancelCalendarItem `xml:",omitempty"`
+	XMLName               xml.Name                    `xml:"m:Items"`
+	Message               []Message                   `xml:",omitempty"`
+	CalendarItem          []SendCalendarItem          `xml:",omitempty"`
+	CancelCalendarItem    []SendCancelCalendarItem    `xml:",omitempty"`
+	AcceptItem            []SendAcceptItem            `xml:",omitempty"`
+	TentativelyAcceptItem []SendTentativelyAcceptItem `xml:",omitempty"`
+	DeclineItem           []SendDeclineItem           `xml:",omitempty"`
 	// Contact             Contact             `xml:"t:Contact"`
 	// DistributionList    DistributionList    `xml:"t:DistributionList"`
 	// MeetingMessage      MeetingMessage      `xml:"t:MeetingMessage"`

@@ -115,6 +115,24 @@ type CancelCalendarItemResponse struct {
 func (op *CancelCalendarItemOperation) Header() *ewsxml.Header { return &op.header }
 func (op *CancelCalendarItemOperation) Body() interface{}      { return op.CreateItem }
 
+type RespondToCalendarItemOperation struct {
+	header     ewsxml.Header
+	CreateItem struct {
+		ewsxml.CreateItem
+	}
+}
+
+type RespondToCalendarItemResponse struct {
+	XMLName          xml.Name `xml:"CreateItemResponse"`
+	ResponseMessages struct {
+		XMLName                   xml.Name `xml:"ResponseMessages"`
+		CreateItemResponseMessage ewsxml.CreateItemResponseMessage
+	}
+}
+
+func (op *RespondToCalendarItemOperation) Header() *ewsxml.Header { return &op.header }
+func (op *RespondToCalendarItemOperation) Body() interface{}      { return op.CreateItem }
+
 func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOperation) (*FindItemCalendarViewResponse, error) {
 	if op.FindItem.Traversal == "" {
 		op.FindItem.Traversal = ewsxml.Traversal_Shallow
@@ -178,5 +196,13 @@ func CancelCalendarItem(ctx context.Context, req Requester, op *CancelCalendarIt
 		op.CreateItem.MessageDisposition = ewsxml.MessageDisposition_SendAndSaveCopy
 	}
 	var out CancelCalendarItemResponse
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
+}
+
+func RespondToCalendarItem(ctx context.Context, req Requester, op *RespondToCalendarItemOperation) (*RespondToCalendarItemResponse, error) {
+	if op.CreateItem.MessageDisposition == "" {
+		op.CreateItem.MessageDisposition = ewsxml.MessageDisposition_SendAndSaveCopy
+	}
+	var out RespondToCalendarItemResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }

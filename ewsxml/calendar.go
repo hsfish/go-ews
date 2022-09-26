@@ -71,7 +71,6 @@ type CalendarItem struct {
 	// InReplyTo                    string      `xml:"t:InReplyTo"`
 	// IsSubmitted                  string      `xml:"t:IsSubmitted"`
 	// IsDraft                      string      `xml:"t:IsDraft"`
-	// IsFromMe                     string      `xml:"t:IsFromMe"`
 	// IsResend                     string      `xml:"t:IsResend"`
 	// IsUnmodified                 string      `xml:"t:IsUnmodified"`
 	// InternetMessageHeaders       string      `xml:"t:InternetMessageHeaders"`
@@ -97,10 +96,12 @@ type CalendarItem struct {
 	IsMeeting   bool
 	IsCancelled bool
 	IsRecurring bool
+	//IsFromMe       bool
+	MyResponseType  string
+	ResponseObjects *ResponseObjects
 	// MeetingRequestWasSent        string      `xml:"t:MeetingRequestWasSent"`
 	// IsResponseRequested          string      `xml:"t:IsResponseRequested"`
-	CalendarItemType CalendarItemType
-	// MyResponseType               string      `xml:"t:MyResponseType"`
+	CalendarItemType  CalendarItemType
 	Organizer         *Organizer
 	RequiredAttendees *RequiredAttendees
 	OptionalAttendees *OptionalAttendees
