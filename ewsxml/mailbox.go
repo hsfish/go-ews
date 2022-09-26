@@ -59,8 +59,9 @@ type OneMailbox struct {
 }
 
 type Attendee struct {
-	XMLName xml.Name `xml:"Attendee"`
-	Mailbox Mailbox
+	XMLName      xml.Name `xml:"Attendee"`
+	Mailbox      Mailbox
+	ResponseType string
 }
 
 type RequiredAttendees struct {
