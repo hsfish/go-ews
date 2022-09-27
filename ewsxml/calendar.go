@@ -140,18 +140,19 @@ type CalendarItem struct {
 	// UniqueBody                   string      `xml:"t:UniqueBody"`
 }
 type SendCalendarItem struct {
-	XMLName           xml.Name   `xml:"t:CalendarItem"`
-	Subject           *string    `xml:"t:Subject,omitempty"`
-	Start             *time.Time `xml:"t:Start,omitempty"`
-	End               *time.Time `xml:"t:End,omitempty"`
-	StartTimeZone     *StartTimeZone
-	EndTimeZone       *EndTimeZone
-	IsAllDayEvent     *bool   `xml:"t:IsAllDayEvent,omitempty"`
-	Location          *string `xml:"t:Location,omitempty"`
-	Body              *SendBody
-	RequiredAttendees *SendRequiredAttendees
-	OptionalAttendees *SendOptionalAttendees
-	Recurrence        *SendRecurrence
+	XMLName              xml.Name   `xml:"t:CalendarItem"`
+	Subject              *string    `xml:"t:Subject,omitempty"`
+	Start                *time.Time `xml:"t:Start,omitempty"`
+	End                  *time.Time `xml:"t:End,omitempty"`
+	StartTimeZone        *StartTimeZone
+	EndTimeZone          *EndTimeZone
+	IsAllDayEvent        *bool   `xml:"t:IsAllDayEvent,omitempty"`
+	Location             *string `xml:"t:Location,omitempty"`
+	Body                 *SendBody
+	RequiredAttendees    *SendRequiredAttendees
+	OptionalAttendees    *SendOptionalAttendees
+	Recurrence           *SendRecurrence
+	LegacyFreeBusyStatus *string `xml:"t:LegacyFreeBusyStatus,omitempty"`
 }
 
 // ConcatenatedString represents the concatenated display string that is used
