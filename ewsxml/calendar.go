@@ -97,8 +97,9 @@ type CalendarItem struct {
 	IsCancelled bool
 	IsRecurring bool
 	//IsFromMe       bool
-	MyResponseType  string
-	ResponseObjects *ResponseObjects
+	MyResponseType       string
+	AppointmentReplyTime string
+	ResponseObjects      *ResponseObjects
 	// MeetingRequestWasSent        string      `xml:"t:MeetingRequestWasSent"`
 	// IsResponseRequested          string      `xml:"t:IsResponseRequested"`
 	CalendarItemType  CalendarItemType
@@ -112,7 +113,6 @@ type CalendarItem struct {
 	// AdjacentMeetings             string      `xml:"t:AdjacentMeetings"`
 	// Duration                     string      `xml:"t:Duration"`
 	// TimeZone                     string      `xml:"t:TimeZone"`
-	// AppointmentReplyTime         string      `xml:"t:AppointmentReplyTime"`
 	// AppointmentSequenceNumber    string      `xml:"t:AppointmentSequenceNumber"`
 	// AppointmentState             string      `xml:"t:AppointmentState"`
 	Recurrence *Recurrence
