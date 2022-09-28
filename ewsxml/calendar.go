@@ -153,6 +153,7 @@ type SendCalendarItem struct {
 	OptionalAttendees    *SendOptionalAttendees
 	Recurrence           *SendRecurrence
 	LegacyFreeBusyStatus *string `xml:"t:LegacyFreeBusyStatus,omitempty"`
+	Sensitivity          *string `xml:"t:Sensitivity,omitempty"`
 }
 
 // ConcatenatedString represents the concatenated display string that is used
