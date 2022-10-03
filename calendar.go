@@ -133,6 +133,21 @@ type RespondToCalendarItemResponse struct {
 func (op *RespondToCalendarItemOperation) Header() *ewsxml.Header { return &op.header }
 func (op *RespondToCalendarItemOperation) Body() interface{}      { return op.CreateItem }
 
+type GetRemindersOperation struct {
+	header       ewsxml.Header
+	GetReminders struct {
+		ewsxml.GetReminders
+	}
+}
+
+type GetRemindersResponse struct {
+	XMLName   xml.Name `xml:"GetRemindersResponse"`
+	Reminders ewsxml.Reminders
+}
+
+func (op *GetRemindersOperation) Header() *ewsxml.Header { return &op.header }
+func (op *GetRemindersOperation) Body() interface{}      { return op.GetReminders }
+
 func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOperation) (*FindItemCalendarViewResponse, error) {
 	if op.FindItem.Traversal == "" {
 		op.FindItem.Traversal = ewsxml.Traversal_Shallow
@@ -204,5 +219,13 @@ func RespondToCalendarItem(ctx context.Context, req Requester, op *RespondToCale
 		op.CreateItem.MessageDisposition = ewsxml.MessageDisposition_SendAndSaveCopy
 	}
 	var out RespondToCalendarItemResponse
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
+}
+
+func GetCalendarReminders(ctx context.Context, req Requester, op *GetRemindersOperation) (*GetRemindersResponse, error) {
+	if op.GetReminders.ReminderType == "" {
+		op.GetReminders.ReminderType = "All"
+	}
+	var out GetRemindersResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }

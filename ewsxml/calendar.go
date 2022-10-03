@@ -77,7 +77,7 @@ type CalendarItem struct {
 	// DateTimeSent                 string      `xml:"t:DateTimeSent"`
 	// DateTimeCreated              string      `xml:"t:DateTimeCreated"`
 	// ResponseObjects              string      `xml:"t:ResponseObjects"`
-	// ReminderDueBy                string      `xml:"t:ReminderDueBy"`
+	ReminderDueBy              string
 	ReminderIsSet              bool
 	ReminderMinutesBeforeStart int
 	DisplayCc                  ConcatenatedString `xml:",omitempty"`
@@ -140,20 +140,21 @@ type CalendarItem struct {
 	// UniqueBody                   string      `xml:"t:UniqueBody"`
 }
 type SendCalendarItem struct {
-	XMLName              xml.Name   `xml:"t:CalendarItem"`
-	Subject              *string    `xml:"t:Subject,omitempty"`
-	Start                *time.Time `xml:"t:Start,omitempty"`
-	End                  *time.Time `xml:"t:End,omitempty"`
-	StartTimeZone        *StartTimeZone
-	EndTimeZone          *EndTimeZone
-	IsAllDayEvent        *bool   `xml:"t:IsAllDayEvent,omitempty"`
-	Location             *string `xml:"t:Location,omitempty"`
-	Body                 *SendBody
-	RequiredAttendees    *SendRequiredAttendees
-	OptionalAttendees    *SendOptionalAttendees
-	Recurrence           *SendRecurrence
-	LegacyFreeBusyStatus *string `xml:"t:LegacyFreeBusyStatus,omitempty"`
-	Sensitivity          *string `xml:"t:Sensitivity,omitempty"`
+	XMLName                    xml.Name   `xml:"t:CalendarItem"`
+	Subject                    *string    `xml:"t:Subject,omitempty"`
+	Start                      *time.Time `xml:"t:Start,omitempty"`
+	End                        *time.Time `xml:"t:End,omitempty"`
+	StartTimeZone              *StartTimeZone
+	EndTimeZone                *EndTimeZone
+	IsAllDayEvent              *bool   `xml:"t:IsAllDayEvent,omitempty"`
+	Location                   *string `xml:"t:Location,omitempty"`
+	Body                       *SendBody
+	RequiredAttendees          *SendRequiredAttendees
+	OptionalAttendees          *SendOptionalAttendees
+	Recurrence                 *SendRecurrence
+	LegacyFreeBusyStatus       *string `xml:"t:LegacyFreeBusyStatus,omitempty"`
+	Sensitivity                *string `xml:"t:Sensitivity,omitempty"`
+	ReminderMinutesBeforeStart *int    `xml:"t:ReminderMinutesBeforeStart,omitempty"`
 }
 
 // ConcatenatedString represents the concatenated display string that is used
