@@ -155,6 +155,7 @@ type SendCalendarItem struct {
 	LegacyFreeBusyStatus       *string `xml:"t:LegacyFreeBusyStatus,omitempty"`
 	Sensitivity                *string `xml:"t:Sensitivity,omitempty"`
 	ReminderMinutesBeforeStart *int    `xml:"t:ReminderMinutesBeforeStart,omitempty"`
+	ReminderIsSet              *bool   `xml:"t:ReminderIsSet,omitempty"`
 }
 
 // ConcatenatedString represents the concatenated display string that is used
