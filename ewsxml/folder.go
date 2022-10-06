@@ -4,6 +4,16 @@ import (
 	"encoding/xml"
 )
 
+// The FolderIds element contains an array of folder identifiers
+// that are used to identify folders to copy, move, get, delete,
+// or monitor for event notifications.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/folderids
+type FolderIds struct {
+	XMLName               xml.Name `xml:"t:FolderIds"`
+	FolderId              []FolderId
+	DistinguishedFolderId []DistinguishedFolderId
+}
+
 // The FolderId element contains the identifier and change key of a folder
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/folderid
 type FolderId struct {

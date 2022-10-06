@@ -148,6 +148,22 @@ type GetRemindersResponse struct {
 func (op *GetRemindersOperation) Header() *ewsxml.Header { return &op.header }
 func (op *GetRemindersOperation) Body() interface{}      { return op.GetReminders }
 
+type SubscribeOperation struct {
+	header    ewsxml.Header
+	Subscribe ewsxml.Subscribe
+}
+
+type SubscribeResponse struct {
+	XMLName          xml.Name `xml:"SubscribeResponse"`
+	ResponseMessages struct {
+		XMLName                  xml.Name `xml:"ResponseMessages"`
+		SubscribeResponseMessage ewsxml.SubscribeResponseMessage
+	}
+}
+
+func (op *SubscribeOperation) Header() *ewsxml.Header { return &op.header }
+func (op *SubscribeOperation) Body() interface{}      { return op.Subscribe }
+
 func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOperation) (*FindItemCalendarViewResponse, error) {
 	if op.FindItem.Traversal == "" {
 		op.FindItem.Traversal = ewsxml.Traversal_Shallow
@@ -227,5 +243,13 @@ func GetCalendarReminders(ctx context.Context, req Requester, op *GetRemindersOp
 		op.GetReminders.ReminderType = "All"
 	}
 	var out GetRemindersResponse
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
+}
+
+func SubscribeToNotifications(ctx context.Context, req Requester, op *SubscribeOperation) (*SubscribeResponse, error) {
+	var out SubscribeResponse
+	if op.Subscribe.PushSubscriptionRequest.FolderIds.DistinguishedFolderId == nil {
+		op.Subscribe.PushSubscriptionRequest.FolderIds.DistinguishedFolderId = []ewsxml.DistinguishedFolderId{{Id: "calendar"}}
+	}
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }
