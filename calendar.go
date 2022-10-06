@@ -161,6 +161,14 @@ type SubscribeResponse struct {
 	}
 }
 
+type SendNotificationResponse struct {
+	XMLName          xml.Name `xml:"SendNotification"`
+	ResponseMessages struct {
+		XMLName                         xml.Name `xml:"ResponseMessages"`
+		SendNotificationResponseMessage ewsxml.SendNotificationResponseMessage
+	}
+}
+
 func (op *SubscribeOperation) Header() *ewsxml.Header { return &op.header }
 func (op *SubscribeOperation) Body() interface{}      { return op.Subscribe }
 

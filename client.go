@@ -36,6 +36,7 @@ type Client interface {
 	Url() string
 	Username() string
 	Do(req *Request) (*http.Response, error)
+	ParseXML([]byte, interface{}) error
 }
 
 func NewClient(url string, ver Version, opts ...Option) (Client, error) {
@@ -124,8 +125,12 @@ func (c *client) Request(req *Request, out interface{}) error {
 		return NewError(resp)
 	}
 
+	return c.ParseXML(data, out)
+}
+
+func (c *client) ParseXML(data []byte, out interface{}) error {
 	var x ewsxml.ResponseEnvelope
-	if err = xml.Unmarshal(data, &x); err != nil {
+	if err := xml.Unmarshal(data, &x); err != nil {
 		return errors.WithKind(err, UnmarshalError)
 	}
 

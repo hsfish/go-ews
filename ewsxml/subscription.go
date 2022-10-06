@@ -1,6 +1,9 @@
 package ewsxml
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+	"time"
+)
 
 // The EventType element is used to create a subscription and identifies
 // an event type to be reported in a notification.
@@ -71,4 +74,23 @@ type SubscribeResponseMessage struct {
 	Response
 	SubscriptionId string `xml:"SubscriptionId"`
 	Watermark      string `xml:"Watermark"`
+}
+
+type SendNotificationResponseMessage struct {
+	Response
+	Notification Notification
+}
+
+type Notification struct {
+	XMLName           xml.Name            `xml:"Notification"`
+	SubscriptionId    string              `xml:"SubscriptionId"`
+	PreviousWatermark string              `xml:"PreviousWatermark"`
+	MoreEvents        bool                `xml:"MoreEvents"`
+	CreatedEvent      []NotificationEvent `xml:"CreatedEvent"`
+}
+
+type NotificationEvent struct {
+	Watermark string    `xml:"Watermark"`
+	TimeStamp time.Time `xml:"TimeStamp"`
+	ItemId    ItemId    `xml:"ItemId"`
 }
