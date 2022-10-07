@@ -172,6 +172,14 @@ type SendNotificationResponse struct {
 func (op *SubscribeOperation) Header() *ewsxml.Header { return &op.header }
 func (op *SubscribeOperation) Body() interface{}      { return op.Subscribe }
 
+type SendNotificationResultOperation struct {
+	header                 ewsxml.Header
+	SendNotificationResult ewsxml.SendNotificationResult
+}
+
+func (op *SendNotificationResultOperation) Header() *ewsxml.Header { return &op.header }
+func (op *SendNotificationResultOperation) Body() interface{}      { return op.SendNotificationResult }
+
 func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOperation) (*FindItemCalendarViewResponse, error) {
 	if op.FindItem.Traversal == "" {
 		op.FindItem.Traversal = ewsxml.Traversal_Shallow
