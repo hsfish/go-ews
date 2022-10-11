@@ -11,6 +11,11 @@ type TimeWindow struct {
 	EndTime   time.Time `xml:"t:EndTime"`
 }
 
+type TimeWindowStr struct {
+	StartTime string `xml:"t:StartTime"`
+	EndTime   string `xml:"t:EndTime"`
+}
+
 type TimeZone struct {
 	Bias         int          `xml:"t:Bias"`
 	StandardTime TimeZoneTime `xml:"t:StandardTime"`
