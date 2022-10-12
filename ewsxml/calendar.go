@@ -131,9 +131,8 @@ type CalendarItem struct {
 	// MeetingWorkspaceUrl          string      `xml:"t:MeetingWorkspaceUrl"`
 	// NetShowUrl                   string      `xml:"t:NetShowUrl"`
 	// EffectiveRights              string      `xml:"t:EffectiveRights"`
-	// LastModifiedName             string      `xml:"t:LastModifiedName"`
-	// LastModifiedTime             string      `xml:"t:LastModifiedTime"`
-	IsAssociated bool `xml:",omitempty"`
+	LastModifiedTime string
+	IsAssociated     bool `xml:",omitempty"`
 	// WebClientReadFormQueryString string      `xml:"t:WebClientReadFormQueryString"`
 	// WebClientEditFormQueryString string      `xml:"t:WebClientEditFormQueryString"`
 	// ConversationId               string      `xml:"t:ConversationId"`
