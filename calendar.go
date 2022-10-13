@@ -180,6 +180,37 @@ type SendNotificationResultOperation struct {
 func (op *SendNotificationResultOperation) Header() *ewsxml.Header { return &op.header }
 func (op *SendNotificationResultOperation) Body() interface{}      { return op.SendNotificationResult }
 
+type GetUserConfigurationOperation struct {
+	header               ewsxml.Header
+	GetUserConfiguration ewsxml.GetUserConfiguration
+}
+type GetUserConfigurationResponse struct {
+	XMLName          xml.Name `xml:"GetUserConfigurationResponse"`
+	ResponseMessages struct {
+		XMLName                             xml.Name `xml:"ResponseMessages"`
+		GetUserConfigurationResponseMessage ewsxml.GetUserConfigurationResponseMessage
+	}
+}
+
+func (op *GetUserConfigurationOperation) Header() *ewsxml.Header { return &op.header }
+func (op *GetUserConfigurationOperation) Body() interface{}      { return op.GetUserConfiguration }
+
+type UpdateUserConfigurationOperation struct {
+	header                  ewsxml.Header
+	UpdateUserConfiguration ewsxml.UpdateUserConfiguration
+}
+
+type UpdateUserConfigurationResponse struct {
+	XMLName          xml.Name `xml:"UpdateUserConfigurationResponse"`
+	ResponseMessages struct {
+		XMLName                                xml.Name `xml:"ResponseMessages"`
+		UpdateUserConfigurationResponseMessage ewsxml.Response
+	}
+}
+
+func (op *UpdateUserConfigurationOperation) Header() *ewsxml.Header { return &op.header }
+func (op *UpdateUserConfigurationOperation) Body() interface{}      { return op.UpdateUserConfiguration }
+
 func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOperation) (*FindItemCalendarViewResponse, error) {
 	if op.FindItem.Traversal == "" {
 		op.FindItem.Traversal = ewsxml.Traversal_Shallow
@@ -267,5 +298,15 @@ func SubscribeToNotifications(ctx context.Context, req Requester, op *SubscribeO
 	if op.Subscribe.PushSubscriptionRequest.FolderIds.DistinguishedFolderId == nil {
 		op.Subscribe.PushSubscriptionRequest.FolderIds.DistinguishedFolderId = []ewsxml.DistinguishedFolderId{{Id: "calendar"}}
 	}
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
+}
+
+func GetUserConfiguration(ctx context.Context, req Requester, op *GetUserConfigurationOperation) (*GetUserConfigurationResponse, error) {
+	var out GetUserConfigurationResponse
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
+}
+
+func UpdateUserConfiguration(ctx context.Context, req Requester, op *UpdateUserConfigurationOperation) (*UpdateUserConfigurationResponse, error) {
+	var out UpdateUserConfigurationResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }
