@@ -17,9 +17,9 @@ type TimeWindowStr struct {
 }
 
 type TimeZone struct {
-	Bias         int          `xml:"t:Bias"`
-	StandardTime TimeZoneTime `xml:"t:StandardTime"`
-	DaylightTime TimeZoneTime `xml:"t:DaylightTime"`
+	Bias         int          `xml:"Bias"`
+	StandardTime TimeZoneTime `xml:"StandardTime"`
+	DaylightTime TimeZoneTime `xml:"DaylightTime"`
 }
 
 type TimeZoneTime struct {

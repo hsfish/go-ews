@@ -168,6 +168,7 @@ type CalendarEvent struct {
 // https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/workinghours-ex15websvcsotherref
 type WorkingHours struct {
 	XMLName            xml.Name `xml:"WorkingHours"`
+	TimeZone           TimeZone
 	WorkingPeriodArray struct {
 		WorkingPeriod []WorkingPeriod
 	}
