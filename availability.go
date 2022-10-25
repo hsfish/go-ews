@@ -29,19 +29,33 @@ func GetUserAvailability(ctx context.Context, req Requester, op *GetUserAvailabi
 	if op.GetUserAvailabilityRequest.FreeBusyViewOptions.MergedFreeBusyIntervalInMinutes == 0 {
 		op.GetUserAvailabilityRequest.FreeBusyViewOptions.MergedFreeBusyIntervalInMinutes = 30
 	}
-	if op.GetUserAvailabilityRequest.SuggestionsViewOptions == nil {
-		op.GetUserAvailabilityRequest.SuggestionsViewOptions = &ewsxml.SuggestionsViewOptions{
-			GoodThreshold:                  49,
-			MaximumResultsByDay:            2,
-			MaximumNonWorkHourResultsByDay: 0,
-			MeetingDurationInMinutes:       60,
-			MinimumSuggestionQuality:       ewsxml.MinimumSuggestionQuality_Good,
-			DetailedSuggestionsWindow: ewsxml.TimeWindowStr{
-				StartTime: op.GetUserAvailabilityRequest.FreeBusyViewOptions.TimeWindow.StartTime,
-				EndTime:   op.GetUserAvailabilityRequest.FreeBusyViewOptions.TimeWindow.EndTime,
-			},
-		}
+
+	if op.GetUserAvailabilityRequest.SuggestionsViewOptions.GoodThreshold == 0 {
+		op.GetUserAvailabilityRequest.SuggestionsViewOptions.GoodThreshold = 49
 	}
+
+	if op.GetUserAvailabilityRequest.SuggestionsViewOptions.MaximumResultsByDay == 0 {
+		op.GetUserAvailabilityRequest.SuggestionsViewOptions.MaximumResultsByDay = 2
+	}
+	if op.GetUserAvailabilityRequest.SuggestionsViewOptions.MeetingDurationInMinutes == 0 {
+		op.GetUserAvailabilityRequest.SuggestionsViewOptions.MeetingDurationInMinutes = 60
+
+	}
+	if op.GetUserAvailabilityRequest.SuggestionsViewOptions.MinimumSuggestionQuality == "" {
+		op.GetUserAvailabilityRequest.SuggestionsViewOptions.MinimumSuggestionQuality = ewsxml.MinimumSuggestionQuality_Good
+
+	}
+
+	if op.GetUserAvailabilityRequest.SuggestionsViewOptions.DetailedSuggestionsWindow.StartTime == "" {
+		t := op.GetUserAvailabilityRequest.FreeBusyViewOptions.TimeWindow.StartTime
+		op.GetUserAvailabilityRequest.SuggestionsViewOptions.DetailedSuggestionsWindow.StartTime = t
+	}
+
+	if op.GetUserAvailabilityRequest.SuggestionsViewOptions.DetailedSuggestionsWindow.EndTime == "" {
+		t := op.GetUserAvailabilityRequest.FreeBusyViewOptions.TimeWindow.EndTime
+		op.GetUserAvailabilityRequest.SuggestionsViewOptions.DetailedSuggestionsWindow.EndTime = t
+	}
+
 	var out GetUserAvailabilityResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }
