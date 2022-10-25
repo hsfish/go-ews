@@ -182,3 +182,39 @@ type WorkingPeriod struct {
 	StartTimeInMinutes int
 	EndTimeInMinutes   int
 }
+
+// The SuggestionsResponse element contains response status information and
+// suggestion data for requested meeting suggestions.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/suggestionsresponse
+type SuggestionsResponse struct {
+	XMLName                  xml.Name `xml:"SuggestionsResponse"`
+	SuggestionDayResultArray struct {
+		SuggestionDayResult []SuggestionDayResult
+	}
+}
+
+type SuggestionDayResultArray struct {
+	XMLName xml.Name `xml:"SuggestionDayResultArray"`
+}
+
+// The SuggestionDayResult element represents a single day that contains
+// suggested meeting times.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/suggestiondayresult
+type SuggestionDayResult struct {
+	XMLName         xml.Name `xml:"SuggestionDayResult"`
+	Date            string
+	DayQuality      MinimumSuggestionQuality
+	SuggestionArray struct {
+		Suggestion []Suggestion
+	}
+}
+
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/suggestion
+// The Suggestion element represents a single meeting suggestion.
+type Suggestion struct {
+	XMLName           xml.Name `xml:"Suggestion"`
+	MeetingTime       string
+	IsWorkTime        bool
+	SuggestionQuality MinimumSuggestionQuality
+	//AttendeeConflictDataArray
+}

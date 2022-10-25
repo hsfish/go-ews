@@ -18,6 +18,7 @@ func (op *GetUserAvailabilityOperation) Body() interface{}      { return op.GetU
 type GetUserAvailabilityResponse struct {
 	XMLName               xml.Name `xml:"GetUserAvailabilityResponse"`
 	FreeBusyResponseArray ewsxml.FreeBusyResponseArray
+	SuggestionsResponse   ewsxml.SuggestionsResponse
 }
 
 func GetUserAvailability(ctx context.Context, req Requester, op *GetUserAvailabilityOperation) (*GetUserAvailabilityResponse, error) {
