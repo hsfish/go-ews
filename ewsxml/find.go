@@ -25,6 +25,11 @@ type BodyType string
 
 func (s BodyType) String() string { return string(s) }
 
+// Describes the sort order direction.
+type Order string
+
+func (s Order) String() string { return string(s) }
+
 //goland:noinspection GoUnusedConst,GoSnakeCaseUsage
 const (
 	// Traversal_Shallow returns only the identities of items in the folder.
@@ -59,6 +64,9 @@ const (
 	// BodyType_Text indicates the response will return an item body as plain
 	// text.
 	BodyType_Text BodyType = "Text"
+
+	Order_Ascending  Order = "Ascending"
+	Order_Descending Order = "Descending"
 )
 
 // The Body element specifies the body of an item.
@@ -132,4 +140,18 @@ type RootFolder struct {
 	TotalItemsInView        int      `xml:"TotalItemsInView,attr"`
 	Items                   Items
 	// Groups
+}
+
+// The SortOrder element defines how items are sorted in a FindItem or
+// FindConversation request.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/sortorder
+type SortOrder struct {
+	XMLName    xml.Name `xml:"m:SortOrder"`
+	FieldOrder []FieldOrder
+}
+
+type FieldOrder struct {
+	XMLName  xml.Name `xml:"t:FieldOrder"`
+	Order    Order    `xml:"Order,attr"`
+	FieldURI FieldURI
 }

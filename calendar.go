@@ -217,6 +217,7 @@ type FindItemQueryStringOperation struct {
 		ewsxml.FindItem
 		// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/querystring-querystringtype
 		QueryString string `xml:"m:QueryString"`
+		SortOrder   ewsxml.SortOrder
 
 		ParentFolderIds struct {
 			DistinguishedFolderId ewsxml.DistinguishedFolderId `xml:"t:DistinguishedFolderId"`
