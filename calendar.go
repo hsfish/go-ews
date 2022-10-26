@@ -23,7 +23,7 @@ type FindItemCalendarViewOperation struct {
 func (op *FindItemCalendarViewOperation) Header() *ewsxml.Header { return &op.header }
 func (op *FindItemCalendarViewOperation) Body() interface{}      { return op.FindItem }
 
-type FindItemCalendarViewResponse struct {
+type FindItemResponse struct {
 	XMLName          xml.Name `xml:"FindItemResponse"`
 	ResponseMessages struct {
 		XMLName                 xml.Name `xml:"ResponseMessages"`
@@ -211,7 +211,23 @@ type UpdateUserConfigurationResponse struct {
 func (op *UpdateUserConfigurationOperation) Header() *ewsxml.Header { return &op.header }
 func (op *UpdateUserConfigurationOperation) Body() interface{}      { return op.UpdateUserConfiguration }
 
-func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOperation) (*FindItemCalendarViewResponse, error) {
+type FindItemQueryStringOperation struct {
+	header   ewsxml.Header
+	FindItem struct {
+		ewsxml.FindItem
+		// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/querystring-querystringtype
+		QueryString string `xml:"m:QueryString"`
+
+		ParentFolderIds struct {
+			DistinguishedFolderId ewsxml.DistinguishedFolderId `xml:"t:DistinguishedFolderId"`
+		} `xml:"m:ParentFolderIds"`
+	}
+}
+
+func (op *FindItemQueryStringOperation) Header() *ewsxml.Header { return &op.header }
+func (op *FindItemQueryStringOperation) Body() interface{}      { return op.FindItem }
+
+func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOperation) (*FindItemResponse, error) {
 	if op.FindItem.Traversal == "" {
 		op.FindItem.Traversal = ewsxml.Traversal_Shallow
 	}
@@ -220,7 +236,7 @@ func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOp
 	}
 	op.FindItem.ParentFolderIds.DistinguishedFolderId.Id = "calendar"
 
-	var out FindItemCalendarViewResponse
+	var out FindItemResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }
 
@@ -308,5 +324,18 @@ func GetUserConfiguration(ctx context.Context, req Requester, op *GetUserConfigu
 
 func UpdateUserConfiguration(ctx context.Context, req Requester, op *UpdateUserConfigurationOperation) (*UpdateUserConfigurationResponse, error) {
 	var out UpdateUserConfigurationResponse
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
+}
+
+func SearchCalendarItem(ctx context.Context, req Requester, op *FindItemQueryStringOperation) (*FindItemResponse, error) {
+	if op.FindItem.Traversal == "" {
+		op.FindItem.Traversal = ewsxml.Traversal_Shallow
+	}
+	if op.FindItem.ItemShape.BaseShape == "" {
+		op.FindItem.ItemShape.BaseShape = ewsxml.BaseShape_Default
+	}
+	op.FindItem.ParentFolderIds.DistinguishedFolderId.Id = "calendar"
+
+	var out FindItemResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }
