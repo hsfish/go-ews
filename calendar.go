@@ -228,6 +228,22 @@ type FindItemQueryStringOperation struct {
 func (op *FindItemQueryStringOperation) Header() *ewsxml.Header { return &op.header }
 func (op *FindItemQueryStringOperation) Body() interface{}      { return op.FindItem }
 
+type GetFolderOperation struct {
+	header    ewsxml.Header
+	GetFolder ewsxml.GetFolder
+}
+
+type GetFolderResponse struct {
+	XMLName          xml.Name `xml:"GetFolderResponse"`
+	ResponseMessages struct {
+		XMLName                  xml.Name `xml:"ResponseMessages"`
+		GetFolderResponseMessage []ewsxml.GetFolderResponseMessage
+	}
+}
+
+func (op *GetFolderOperation) Header() *ewsxml.Header { return &op.header }
+func (op *GetFolderOperation) Body() interface{}      { return op.GetFolder }
+
 func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOperation) (*FindItemResponse, error) {
 	if op.FindItem.Traversal == "" {
 		op.FindItem.Traversal = ewsxml.Traversal_Shallow
@@ -338,5 +354,10 @@ func SearchCalendarItem(ctx context.Context, req Requester, op *FindItemQueryStr
 	op.FindItem.ParentFolderIds.DistinguishedFolderId.Id = "calendar"
 
 	var out FindItemResponse
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
+}
+
+func GetCalendarFolders(ctx context.Context, req Requester, op *GetFolderOperation) (*GetFolderResponse, error) {
+	var out GetFolderResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }
