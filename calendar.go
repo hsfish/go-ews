@@ -15,7 +15,7 @@ type FindItemCalendarViewOperation struct {
 
 		// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/parentfolderids
 		ParentFolderIds struct {
-			DistinguishedFolderId ewsxml.DistinguishedFolderId `xml:"t:DistinguishedFolderId"`
+			DistinguishedFolderId ewsxml.SendDistinguishedFolderId `xml:"t:DistinguishedFolderId"`
 		} `xml:"m:ParentFolderIds"`
 	}
 }
