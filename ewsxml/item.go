@@ -100,10 +100,11 @@ type SendItem struct {
 }
 
 type ItemIds struct {
-	XMLName               xml.Name `xml:"m:ItemIds"`
-	ItemId                []ItemId `xml:"t:ItemId"`
-	OccurrenceItemId      []OccurrenceItemId
-	RecurringMasterItemId []RecurringMasterItemId
+	XMLName                     xml.Name `xml:"m:ItemIds"`
+	ItemId                      []ItemId `xml:"t:ItemId"`
+	OccurrenceItemId            []OccurrenceItemId
+	RecurringMasterItemId       []RecurringMasterItemId
+	RecurringMasterItemIdRanges []RecurringMasterItemIdRanges
 }
 
 // The ItemId element contains the unique identifier and change key of an item
@@ -131,4 +132,22 @@ type RecurringMasterItemId struct {
 	XMLName      xml.Name `xml:"t:RecurringMasterItemId"`
 	OccurrenceId string   `xml:"OccurrenceId,attr"`
 	ChangeKey    string   `xml:"ChangeKey,attr,omitempty"`
+}
+
+// The ParentItemId element identifies the parent item that links to an
+// associated attachment.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/parentitemid
+type ParentItemId struct {
+	XMLName   xml.Name `xml:"m:ParentItemId"`
+	Id        string   `xml:"Id,attr"`
+	ChangeKey string   `xml:"ChangeKey,attr,omitempty"`
+}
+
+// The RecurringMasterItemIdRanges element specifies an array of occurrence ranges.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/recurringmasteritemidranges
+type RecurringMasterItemIdRanges struct {
+	XMLName   xml.Name `xml:"t:RecurringMasterItemIdRanges"`
+	Id        string   `xml:"Id,attr"`
+	ChangeKey string   `xml:"ChangeKey,attr,omitempty"`
+	Ranges    Ranges
 }

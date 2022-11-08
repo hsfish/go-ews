@@ -150,3 +150,20 @@ type SendNumberedRecurrence struct {
 	StartDate           time.Time `xml:"t:StartDate"`
 	NumberOfOccurrences int       `xml:"t:NumberOfOccurrences"`
 }
+
+// The Ranges element specifies an array of recurrence ranges.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/ranges
+type Ranges struct {
+	XMLName xml.Name `xml:"t:Ranges"`
+	Range   []Range
+}
+
+// The Range element specifies a range of calendar item occurrences for a repeating calendar item.const
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/range
+type Range struct {
+	XMLName                  xml.Name  `xml:"t:Range"`
+	Start                    time.Time `xml:"Start,attr"`
+	End                      time.Time `xml:"End,attr"`
+	Count                    int       `xml:"Count,attr"`
+	CompareOriginalStartTime bool      `xml:"CompareOriginalStartTime,attr"`
+}
