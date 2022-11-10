@@ -244,6 +244,22 @@ type GetFolderResponse struct {
 func (op *GetFolderOperation) Header() *ewsxml.Header { return &op.header }
 func (op *GetFolderOperation) Body() interface{}      { return op.GetFolder }
 
+type FindFolderOperation struct {
+	header     ewsxml.Header
+	FindFolder ewsxml.FindFolder
+}
+
+type FindFolderResponse struct {
+	XMLName          xml.Name `xml:"FindFolderResponse"`
+	ResponseMessages struct {
+		XMLName                   xml.Name `xml:"ResponseMessages"`
+		FindFolderResponseMessage []ewsxml.FindFolderResponseMessage
+	}
+}
+
+func (op *FindFolderOperation) Header() *ewsxml.Header { return &op.header }
+func (op *FindFolderOperation) Body() interface{}      { return op.FindFolder }
+
 func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOperation) (*FindItemResponse, error) {
 	if op.FindItem.Traversal == "" {
 		op.FindItem.Traversal = ewsxml.Traversal_Shallow
@@ -359,5 +375,13 @@ func SearchCalendarItem(ctx context.Context, req Requester, op *FindItemQueryStr
 
 func GetCalendarFolders(ctx context.Context, req Requester, op *GetFolderOperation) (*GetFolderResponse, error) {
 	var out GetFolderResponse
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
+}
+
+func FindCalendarFolders(ctx context.Context, req Requester, op *FindFolderOperation) (*FindFolderResponse, error) {
+	if op.FindFolder.Traversal == "" {
+		op.FindFolder.Traversal = ewsxml.Traversal_Shallow
+	}
+	var out FindFolderResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }

@@ -42,6 +42,7 @@ const (
 	// Traversal_Associated returns only the identities of associated items in
 	// the folder.
 	Traversal_Associated Traversal = "Associated"
+	Traversal_Deep       Traversal = "Deep"
 
 	// BaseShape_IdOnly returns only the item or folder ID.
 	BaseShape_IdOnly BaseShape = "IdOnly"

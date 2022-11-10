@@ -20,6 +20,12 @@ type SendFolderIds struct {
 	DistinguishedFolderId []SendDistinguishedFolderId
 }
 
+type SendParentFolderIds struct {
+	XMLName               xml.Name `xml:"m:ParentFolderIds"`
+	FolderId              []SendFolderId
+	DistinguishedFolderId []SendDistinguishedFolderId
+}
+
 // The FolderId element contains the identifier and change key of a folder
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/folderid
 type FolderId struct {
@@ -67,6 +73,18 @@ type GetFolder struct {
 	FolderIds   SendFolderIds
 }
 
+// The FindFolder element defines a request to find folders in a mailbox.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/findfolder
+type FindFolder struct {
+	XMLName     xml.Name  `xml:"m:FindFolder"`
+	Traversal   Traversal `xml:"Traversal,attr"`
+	FolderShape FolderShape
+	//IndexedPageFolderView
+	//FractionalPageFolderView
+	//Restriction
+	ParentFolderIds SendParentFolderIds
+}
+
 // The FolderShape element identifies the folder properties to include in a
 // GetFolder, FindFolder, or SyncFolderHierarchy response.
 // https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/foldershape
@@ -82,13 +100,27 @@ type FolderShape struct {
 type GetFolderResponseMessage struct {
 	XMLName xml.Name `xml:"GetFolderResponseMessage"`
 	Response
-	Folders struct {
-		//Folder         []Folder
-		CalendarFolder []CalendarFolder
-		//ContactsFolder
-		//TasksFolder
-		//SearchFolder
-	} `xml:"Folders"`
+	Folders Folders
+}
+
+// The FindFolderResponseMessage element contains the status and result of a single
+// FindFolder operation request.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/findfolderresponsemessage
+type FindFolderResponseMessage struct {
+	XMLName xml.Name `xml:"FindFolderResponseMessage"`
+	Response
+	RootFolder struct {
+		Folders Folders
+	} `xml:"RootFolder"`
+}
+
+type Folders struct {
+	XMLName xml.Name `xml:"Folders"`
+	//Folder         []Folder
+	CalendarFolder []CalendarFolder
+	//ContactsFolder
+	//TasksFolder
+	//SearchFolder
 }
 
 type CalendarFolder struct {
