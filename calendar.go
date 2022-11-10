@@ -14,9 +14,7 @@ type FindItemCalendarViewOperation struct {
 		CalendarView ewsxml.CalendarView
 
 		// https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/parentfolderids
-		ParentFolderIds struct {
-			DistinguishedFolderId ewsxml.SendDistinguishedFolderId `xml:"t:DistinguishedFolderId"`
-		} `xml:"m:ParentFolderIds"`
+		ParentFolderIds ewsxml.SendParentFolderIds
 	}
 }
 
@@ -267,7 +265,7 @@ func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOp
 	if op.FindItem.ItemShape.BaseShape == "" {
 		op.FindItem.ItemShape.BaseShape = ewsxml.BaseShape_Default
 	}
-	op.FindItem.ParentFolderIds.DistinguishedFolderId.Id = "calendar"
+	op.FindItem.ParentFolderIds.DistinguishedFolderId[0].Id = "calendar"
 
 	var out FindItemResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
