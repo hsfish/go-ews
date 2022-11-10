@@ -265,7 +265,9 @@ func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOp
 	if op.FindItem.ItemShape.BaseShape == "" {
 		op.FindItem.ItemShape.BaseShape = ewsxml.BaseShape_Default
 	}
-	op.FindItem.ParentFolderIds.DistinguishedFolderId[0].Id = "calendar"
+
+	id := ewsxml.SendDistinguishedFolderId{Id: "calendar"}
+	op.FindItem.ParentFolderIds.DistinguishedFolderId = append(op.FindItem.ParentFolderIds.DistinguishedFolderId, id)
 
 	var out FindItemResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
