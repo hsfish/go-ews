@@ -67,7 +67,7 @@ type CalendarItem struct {
 	Body        *Body       `xml:",omitempty"`
 	// DateTimeReceived             string      `xml:"t:DateTimeReceived"`
 	// Size                         string      `xml:"t:Size"`
-	// Categories                   string      `xml:"t:Categories"`
+	Categories *Categories `xml:",omitempty"`
 	// InReplyTo                    string      `xml:"t:InReplyTo"`
 	// IsSubmitted                  string      `xml:"t:IsSubmitted"`
 	// IsDraft                      string      `xml:"t:IsDraft"`
@@ -155,6 +155,7 @@ type SendCalendarItem struct {
 	Sensitivity                *string `xml:"t:Sensitivity,omitempty"`
 	ReminderMinutesBeforeStart *int    `xml:"t:ReminderMinutesBeforeStart,omitempty"`
 	ReminderIsSet              *bool   `xml:"t:ReminderIsSet,omitempty"`
+	Categories                 *SendCategories
 }
 
 // ConcatenatedString represents the concatenated display string that is used
