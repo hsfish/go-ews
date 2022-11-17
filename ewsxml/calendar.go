@@ -96,6 +96,7 @@ type CalendarItem struct {
 	IsMeeting   bool
 	IsCancelled bool
 	IsRecurring bool
+	IsOrganizer bool
 	//IsFromMe       bool
 	MyResponseType       string
 	AppointmentReplyTime string
