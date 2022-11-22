@@ -118,3 +118,18 @@ type CreateAttachmentsResponseMessage struct {
 	XMLName     xml.Name `xml:"CreateAttachmentResponseMessage"`
 	Attachments Attachments
 }
+
+// The DeleteAttachment operation is used to delete file and item attachments
+// from an existing item in the Exchange store.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/deleteattachment-operation
+type DeleteAttachment struct {
+	XMLName       xml.Name `xml:"m:DeleteAttachment"`
+	AttachmentIds *AttachmentIds
+}
+
+// The DeleteAttachmentResponseMessage element contains the status and
+// result of a single DeleteAttachment operation request.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/deleteattachmentresponsemessage
+type DeleteAttachmentResponseMessage struct {
+	XMLName xml.Name `xml:"DeleteAttachmentResponseMessage"`
+}
