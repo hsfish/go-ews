@@ -93,3 +93,28 @@ type GetAttachmentResponseMessage struct {
 	XMLName     xml.Name `xml:"GetAttachmentResponseMessage"`
 	Attachments Attachments
 }
+
+// The CreateAttachment element defines a request to create an attachment to an
+// item in the Exchange store.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/createattachment
+type CreateAttachment struct {
+	XMLName      xml.Name `xml:"m:CreateAttachment"`
+	ParentItemId ParentItemId
+	Attachments  SendAttachments
+}
+
+type SendAttachments struct {
+	XMLName        xml.Name `xml:"m:Attachments"`
+	FileAttachment []SendFileAttachment
+}
+
+type SendFileAttachment struct {
+	XMLName xml.Name `xml:"t:FileAttachment"`
+	Name    string   `xml:"t:Name"`
+	Content string   `xml:"t:Content"`
+}
+
+type CreateAttachmentsResponseMessage struct {
+	XMLName     xml.Name `xml:"CreateAttachmentResponseMessage"`
+	Attachments Attachments
+}

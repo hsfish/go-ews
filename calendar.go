@@ -258,6 +258,24 @@ type FindFolderResponse struct {
 func (op *FindFolderOperation) Header() *ewsxml.Header { return &op.header }
 func (op *FindFolderOperation) Body() interface{}      { return op.FindFolder }
 
+type CreateCalendarItemAttachmentOperation struct {
+	header           ewsxml.Header
+	CreateAttachment struct {
+		ewsxml.CreateAttachment
+	}
+}
+
+type CreateCalendarItemAttachmentResponse struct {
+	XMLName          xml.Name `xml:"CreateAttachmentResponse"`
+	ResponseMessages struct {
+		XMLName                          xml.Name `xml:"ResponseMessages"`
+		CreateAttachmentsResponseMessage ewsxml.CreateAttachmentsResponseMessage
+	}
+}
+
+func (op *CreateCalendarItemAttachmentOperation) Header() *ewsxml.Header { return &op.header }
+func (op *CreateCalendarItemAttachmentOperation) Body() interface{}      { return op.CreateAttachment }
+
 func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOperation) (*FindItemResponse, error) {
 	if op.FindItem.Traversal == "" {
 		op.FindItem.Traversal = ewsxml.Traversal_Shallow
@@ -385,5 +403,10 @@ func FindCalendarFolders(ctx context.Context, req Requester, op *FindFolderOpera
 		op.FindFolder.Traversal = ewsxml.Traversal_Shallow
 	}
 	var out FindFolderResponse
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
+}
+
+func CreateCalendarItemAttachment(ctx context.Context, req Requester, op *CreateCalendarItemAttachmentOperation) (*CreateCalendarItemAttachmentResponse, error) {
+	var out CreateCalendarItemAttachmentResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }
