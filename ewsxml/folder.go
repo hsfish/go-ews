@@ -20,6 +20,11 @@ type SendFolderIds struct {
 	DistinguishedFolderId []SendDistinguishedFolderId
 }
 
+type SendParentFolderId struct {
+	XMLName               xml.Name `xml:"m:ParentFolderId"`
+	FolderId              *SendFolderId
+	DistinguishedFolderId *SendDistinguishedFolderId
+}
 type SendParentFolderIds struct {
 	XMLName               xml.Name `xml:"m:ParentFolderIds"`
 	FolderId              []SendFolderId
@@ -123,6 +128,15 @@ type Folders struct {
 	//SearchFolder
 }
 
+type SendFolders struct {
+	XMLName xml.Name `xml:"m:Folders"`
+	//Folder         []Folder
+	CalendarFolder []SendCalendarFolder
+	//ContactsFolder
+	//TasksFolder
+	//SearchFolder
+}
+
 type CalendarFolder struct {
 	XMLName          xml.Name `xml:"CalendarFolder"`
 	FolderId         FolderId `xml:"FolderId"`
@@ -144,4 +158,27 @@ type CalendarFolder struct {
 		Read             bool
 		ViewPrivateItems bool
 	}
+}
+
+type SendCalendarFolder struct {
+	XMLName     xml.Name `xml:"t:CalendarFolder"`
+	DisplayName string   `xml:"t:DisplayName"`
+}
+
+// The CreateFolder operation creates folders, calendar folders, contacts folders,
+// tasks folders, and search folders.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/createfolder-operation
+type CreateFolder struct {
+	XMLName        xml.Name `xml:"m:CreateFolder"`
+	ParentFolderId *SendParentFolderId
+	Folders        SendFolders
+}
+
+// The CreateFolderResponseMessage element contains the status
+// and result of a single CreateFolder operation request.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/createfolderresponsemessage
+type CreateFolderResponseMessage struct {
+	XMLName xml.Name `xml:"CreateFolderResponseMessage"`
+	Response
+	Folders Folders
 }

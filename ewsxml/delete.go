@@ -76,3 +76,21 @@ type DeleteItemResponseMessage struct {
 	DescriptiveLinkKey int `xml:"DescriptiveLinkKey,attr"`
 	RootFolder         RootFolder
 }
+
+// The DeleteFolder operation deletes folders from a mailbox.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/deletefolder-operation
+type DeleteFolder struct {
+	XMLName    xml.Name   `xml:"m:DeleteFolder"`
+	DeleteType DeleteType `xml:"DeleteType,attr"`
+	FolderIds  SendFolderIds
+}
+
+// The DeleteFolderResponseMessage element contains the status and result
+// of a single DeleteFolder operation request.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/deletefolderresponsemessage
+type DeleteFolderResponseMessage struct {
+	XMLName xml.Name `xml:"DeleteFolderResponseMessage"`
+	Response
+	DescriptiveLinkKey int `xml:"DescriptiveLinkKey,attr"`
+	RootFolder         RootFolder
+}

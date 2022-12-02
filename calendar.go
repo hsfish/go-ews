@@ -258,6 +258,38 @@ type FindFolderResponse struct {
 func (op *FindFolderOperation) Header() *ewsxml.Header { return &op.header }
 func (op *FindFolderOperation) Body() interface{}      { return op.FindFolder }
 
+type CreateFolderOperation struct {
+	header       ewsxml.Header
+	CreateFolder ewsxml.CreateFolder
+}
+
+type CreateFolderResponse struct {
+	XMLName          xml.Name `xml:"CreateFolderResponse"`
+	ResponseMessages struct {
+		XMLName                     xml.Name `xml:"ResponseMessages"`
+		CreateFolderResponseMessage []ewsxml.CreateFolderResponseMessage
+	}
+}
+
+func (op *CreateFolderOperation) Header() *ewsxml.Header { return &op.header }
+func (op *CreateFolderOperation) Body() interface{}      { return op.CreateFolder }
+
+type DeleteFolderOperation struct {
+	header       ewsxml.Header
+	DeleteFolder ewsxml.DeleteFolder
+}
+
+type DeleteFolderResponse struct {
+	XMLName          xml.Name `xml:"DeleteFolderResponse"`
+	ResponseMessages struct {
+		XMLName                     xml.Name `xml:"ResponseMessages"`
+		DeleteFolderResponseMessage []ewsxml.DeleteFolderResponseMessage
+	}
+}
+
+func (op *DeleteFolderOperation) Header() *ewsxml.Header { return &op.header }
+func (op *DeleteFolderOperation) Body() interface{}      { return op.DeleteFolder }
+
 func GetCalendars(ctx context.Context, req Requester, op *FindItemCalendarViewOperation) (*FindItemResponse, error) {
 	if op.FindItem.Traversal == "" {
 		op.FindItem.Traversal = ewsxml.Traversal_Shallow
@@ -385,5 +417,25 @@ func FindCalendarFolders(ctx context.Context, req Requester, op *FindFolderOpera
 		op.FindFolder.Traversal = ewsxml.Traversal_Shallow
 	}
 	var out FindFolderResponse
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
+}
+
+func CreateCalendarFolder(ctx context.Context, req Requester, op *CreateFolderOperation) (*CreateFolderResponse, error) {
+	if op.CreateFolder.ParentFolderId == nil {
+		id := &ewsxml.SendDistinguishedFolderId{
+			Id: "calendar",
+		}
+		op.CreateFolder.ParentFolderId = &ewsxml.SendParentFolderId{DistinguishedFolderId: id}
+	}
+
+	var out CreateFolderResponse
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
+}
+
+func DeleteFolder(ctx context.Context, req Requester, op *DeleteFolderOperation) (*DeleteFolderResponse, error) {
+	if op.DeleteFolder.DeleteType == "" {
+		op.DeleteFolder.DeleteType = ewsxml.DeleteType_HardDelete
+	}
+	var out DeleteFolderResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }
