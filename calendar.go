@@ -274,6 +274,24 @@ type CreateFolderResponse struct {
 func (op *CreateFolderOperation) Header() *ewsxml.Header { return &op.header }
 func (op *CreateFolderOperation) Body() interface{}      { return op.CreateFolder }
 
+type UpdateFolderOperation struct {
+	header       ewsxml.Header
+	UpdateFolder struct {
+		ewsxml.UpdateFolder
+	}
+}
+
+type UpdateFolderResponse struct {
+	XMLName          xml.Name `xml:"UpdateFolderResponse"`
+	ResponseMessages struct {
+		XMLName                     xml.Name `xml:"ResponseMessages"`
+		UpdateFolderResponseMessage ewsxml.UpdateFolderResponseMessage
+	}
+}
+
+func (op *UpdateFolderOperation) Header() *ewsxml.Header { return &op.header }
+func (op *UpdateFolderOperation) Body() interface{}      { return op.UpdateFolder }
+
 type DeleteFolderOperation struct {
 	header       ewsxml.Header
 	DeleteFolder ewsxml.DeleteFolder
@@ -429,6 +447,22 @@ func CreateCalendarFolder(ctx context.Context, req Requester, op *CreateFolderOp
 	}
 
 	var out CreateFolderResponse
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
+}
+
+func UpdateCalendarFolder(ctx context.Context, req Requester, op *UpdateFolderOperation) (*UpdateFolderResponse, error) {
+	//if op.UpdateItem.SendMeetingInvitationsOrCancellations == "" {
+	//	op.UpdateItem.SendMeetingInvitationsOrCancellations = ewsxml.SendMeetingInvitationsOrCancellations_SendToNone
+	//}
+
+	//if op.UpdateItem.ConflictResolution == "" {
+	//	op.UpdateItem.ConflictResolution = ewsxml.ConflictResolution_AutoResolve
+	//}
+
+	//if op.UpdateItem.MessageDisposition == "" {
+	//	op.UpdateItem.MessageDisposition = ewsxml.MessageDisposition_SaveOnly
+	//}
+	var out UpdateFolderResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }
 
