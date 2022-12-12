@@ -41,8 +41,8 @@ const (
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/saveditemfolderid
 type SavedItemFolderId struct {
 	XMLName               xml.Name `xml:"m:SavedItemFolderId"`
-	FolderId              FolderId
-	DistinguishedFolderId DistinguishedFolderId
+	FolderId              *SendFolderId
+	DistinguishedFolderId *DistinguishedFolderId
 }
 
 // The CreateItem element defines a request to create an item in the Exchange
