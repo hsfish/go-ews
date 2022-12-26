@@ -147,3 +147,21 @@ type FieldURI struct {
 	XMLName  xml.Name `xml:"t:FieldURI"`
 	FieldURI string   `xml:"FieldURI,attr"`
 }
+
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/indexedfielduri
+type IndexedFieldURI struct {
+	XMLName    xml.Name `xml:"t:IndexedFieldURI"`
+	FieldURI   string   `xml:"FieldURI,attr"`
+	FieldIndex string   `xml:"FieldIndex,attr"`
+}
+
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/extendedfielduri
+type ExtendedFieldURI struct {
+	XMLName                    xml.Name `xml:"t:ExtendedFieldURI"`
+	DistinguishedPropertySetId string   `xml:"DistinguishedPropertySetId,attr"`
+	PropertySetId              string   `xml:"PropertySetId,attr"`
+	PropertyTag                string   `xml:"PropertyTag,attr"`
+	PropertyName               string   `xml:"PropertyName,attr"`
+	PropertyId                 string   `xml:"PropertyId,attr"`
+	PropertyType               string   `xml:"PropertyType,attr"`
+}

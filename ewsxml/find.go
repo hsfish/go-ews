@@ -82,9 +82,10 @@ type Body struct {
 // The FindItem element defines a request to find items in a mailbox.
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/finditem
 type FindItem struct {
-	XMLName   xml.Name  `xml:"m:FindItem"`
-	Traversal Traversal `xml:"Traversal,attr"`
-	ItemShape ItemShape
+	XMLName     xml.Name  `xml:"m:FindItem"`
+	Traversal   Traversal `xml:"Traversal,attr"`
+	ItemShape   ItemShape
+	Restriction *Restriction
 }
 
 // The ItemShape element identifies a set of properties to return in a GetItem
