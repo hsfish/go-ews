@@ -109,9 +109,10 @@ type SendAttachments struct {
 }
 
 type SendFileAttachment struct {
-	XMLName xml.Name `xml:"t:FileAttachment"`
-	Name    string   `xml:"t:Name"`
-	Content string   `xml:"t:Content"`
+	XMLName  xml.Name `xml:"t:FileAttachment"`
+	Name     string   `xml:"t:Name"`
+	Content  string   `xml:"t:Content"`
+	IsInline bool     `xml:"t:IsInline"`
 }
 
 type CreateAttachmentsResponseMessage struct {
