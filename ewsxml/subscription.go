@@ -87,6 +87,8 @@ type Notification struct {
 	PreviousWatermark string              `xml:"PreviousWatermark"`
 	MoreEvents        bool                `xml:"MoreEvents"`
 	CreatedEvent      []NotificationEvent `xml:"CreatedEvent"`
+	ModifiedEvent     []NotificationEvent `xml:"ModifiedEvent"`
+	DeletedEvent      []NotificationEvent `xml:"DeletedEvent"`
 }
 
 type NotificationEvent struct {
