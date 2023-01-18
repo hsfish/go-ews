@@ -159,9 +159,9 @@ type IndexedFieldURI struct {
 type ExtendedFieldURI struct {
 	XMLName                    xml.Name `xml:"t:ExtendedFieldURI"`
 	DistinguishedPropertySetId string   `xml:"DistinguishedPropertySetId,attr"`
-	PropertySetId              string   `xml:"PropertySetId,attr"`
-	PropertyTag                string   `xml:"PropertyTag,attr"`
-	PropertyName               string   `xml:"PropertyName,attr"`
-	PropertyId                 string   `xml:"PropertyId,attr"`
-	PropertyType               string   `xml:"PropertyType,attr"`
+	PropertySetId              string   `xml:"PropertySetId,attr,omitempty"`
+	PropertyTag                string   `xml:"PropertyTag,attr,omitempty"`
+	PropertyName               string   `xml:"PropertyName,attr,omitempty"`
+	PropertyId                 string   `xml:"PropertyId,attr,omitempty"`
+	PropertyType               string   `xml:"PropertyType,attr,omitempty"`
 }
