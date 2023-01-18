@@ -138,7 +138,7 @@ type CalendarItem struct {
 	// WebClientEditFormQueryString string      `xml:"t:WebClientEditFormQueryString"`
 	// ConversationId               string      `xml:"t:ConversationId"`
 	// UniqueBody                   string      `xml:"t:UniqueBody"`
-	UID string `xml:"t:UID"`
+	UID string `xml:",omitempty"`
 }
 type SendCalendarItem struct {
 	XMLName                    xml.Name   `xml:"t:CalendarItem"`
