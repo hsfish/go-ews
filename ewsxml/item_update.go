@@ -122,8 +122,9 @@ type SendOptionalAttendees struct {
 
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/updates-item
 type Updates struct {
-	XMLName      xml.Name `xml:"t:Updates"`
-	SetItemField []SetItemField
+	XMLName         xml.Name `xml:"t:Updates"`
+	SetItemField    []SetItemField
+	DeleteItemField []DeleteItemField `xml:",omitempty"`
 }
 
 // The UpdateItemResponseMessage element contains the status and result
@@ -140,6 +141,12 @@ type SetItemField struct {
 	XMLName      xml.Name `xml:"t:SetItemField"`
 	FieldURI     FieldURI
 	CalendarItem *SendCalendarItem
+}
+
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/deleteitemfield
+type DeleteItemField struct {
+	XMLName  xml.Name `xml:"t:DeleteItemField"`
+	FieldURI FieldURI
 }
 
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/fielduri
