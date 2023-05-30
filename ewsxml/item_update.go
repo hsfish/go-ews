@@ -122,8 +122,9 @@ type SendOptionalAttendees struct {
 
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/updates-item
 type Updates struct {
-	XMLName      xml.Name `xml:"t:Updates"`
-	SetItemField []SetItemField
+	XMLName         xml.Name `xml:"t:Updates"`
+	SetItemField    []SetItemField
+	DeleteItemField []DeleteItemField `xml:",omitempty"`
 }
 
 // The UpdateItemResponseMessage element contains the status and result
@@ -140,6 +141,12 @@ type SetItemField struct {
 	XMLName      xml.Name `xml:"t:SetItemField"`
 	FieldURI     FieldURI
 	CalendarItem *SendCalendarItem
+}
+
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/deleteitemfield
+type DeleteItemField struct {
+	XMLName  xml.Name `xml:"t:DeleteItemField"`
+	FieldURI FieldURI
 }
 
 // https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/fielduri
@@ -159,9 +166,9 @@ type IndexedFieldURI struct {
 type ExtendedFieldURI struct {
 	XMLName                    xml.Name `xml:"t:ExtendedFieldURI"`
 	DistinguishedPropertySetId string   `xml:"DistinguishedPropertySetId,attr"`
-	PropertySetId              string   `xml:"PropertySetId,attr"`
-	PropertyTag                string   `xml:"PropertyTag,attr"`
-	PropertyName               string   `xml:"PropertyName,attr"`
-	PropertyId                 string   `xml:"PropertyId,attr"`
-	PropertyType               string   `xml:"PropertyType,attr"`
+	PropertySetId              string   `xml:"PropertySetId,attr,omitempty"`
+	PropertyTag                string   `xml:"PropertyTag,attr,omitempty"`
+	PropertyName               string   `xml:"PropertyName,attr,omitempty"`
+	PropertyId                 string   `xml:"PropertyId,attr,omitempty"`
+	PropertyType               string   `xml:"PropertyType,attr,omitempty"`
 }
