@@ -20,6 +20,14 @@ type SendFolderIds struct {
 	DistinguishedFolderId []SendDistinguishedFolderId
 }
 
+// The ToFolderId element represents the destination folder for a copied or moved item or folder.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/tofolderid
+type ToFolderId struct {
+	XMLName               xml.Name `xml:"m:ToFolderId"`
+	FolderId              []SendFolderId
+	DistinguishedFolderId []SendDistinguishedFolderId
+}
+
 type SendParentFolderId struct {
 	XMLName               xml.Name `xml:"m:ParentFolderId"`
 	FolderId              *SendFolderId

@@ -151,3 +151,20 @@ type RecurringMasterItemIdRanges struct {
 	ChangeKey string   `xml:"ChangeKey,attr,omitempty"`
 	Ranges    Ranges
 }
+
+// The MoveItem operation is used to move one or more items to a single destination folder.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/moveitem-operation
+type MoveItem struct {
+	XMLName    xml.Name `xml:"m:MoveItem"`
+	ItemIds    ItemIds
+	ToFolderId ToFolderId
+}
+
+// The MoveItemResponseMessage element contains the status and result
+// of a single MoveItem operation request.
+// https://learn.microsoft.com/en-us/exchange/client-developer/web-service-reference/moveitemresponsemessage
+type MoveItemResponseMessage struct {
+	XMLName xml.Name `xml:"MoveItemResponseMessage"`
+	Response
+	Items Items
+}

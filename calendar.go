@@ -81,6 +81,24 @@ type UpdateCalendarItemResponse struct {
 func (op *UpdateCalendarItemsOperation) Header() *ewsxml.Header { return &op.header }
 func (op *UpdateCalendarItemsOperation) Body() interface{}      { return op.UpdateItem }
 
+type MoveItemOperation struct {
+	header   ewsxml.Header
+	MoveItem struct {
+		ewsxml.MoveItem
+	}
+}
+
+type MoveItemResponse struct {
+	XMLName          xml.Name `xml:"MoveItemResponse"`
+	ResponseMessages struct {
+		XMLName                 xml.Name `xml:"ResponseMessages"`
+		MoveItemResponseMessage ewsxml.MoveItemResponseMessage
+	}
+}
+
+func (op *MoveItemOperation) Header() *ewsxml.Header { return &op.header }
+func (op *MoveItemOperation) Body() interface{}      { return op.MoveItem }
+
 type DeleteItemCalendarItemsOperation struct {
 	header     ewsxml.Header
 	DeleteItem ewsxml.DeleteItem
@@ -355,6 +373,11 @@ func UpdateCalendarItems(ctx context.Context, req Requester, op *UpdateCalendarI
 		op.UpdateItem.MessageDisposition = ewsxml.MessageDisposition_SaveOnly
 	}
 	var out UpdateCalendarItemResponse
+	return &out, req.Request(NewOperationRequest(ctx, op), &out)
+}
+
+func MoveCalendarItems(ctx context.Context, req Requester, op *MoveItemOperation) (*MoveItemResponse, error) {
+	var out MoveItemResponse
 	return &out, req.Request(NewOperationRequest(ctx, op), &out)
 }
 
