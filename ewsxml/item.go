@@ -81,6 +81,7 @@ type MessageItems struct {
 	AcceptItem            []SendAcceptItem            `xml:",omitempty"`
 	TentativelyAcceptItem []SendTentativelyAcceptItem `xml:",omitempty"`
 	DeclineItem           []SendDeclineItem           `xml:",omitempty"`
+	ForwardItem           []SendForwardItem           `xml:",omitempty"`
 	// Contact             Contact             `xml:"t:Contact"`
 	// DistributionList    DistributionList    `xml:"t:DistributionList"`
 	// MeetingMessage      MeetingMessage      `xml:"t:MeetingMessage"`
