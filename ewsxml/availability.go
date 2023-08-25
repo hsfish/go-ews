@@ -65,7 +65,7 @@ type GetUserAvailabilityRequest struct {
 	XMLName                xml.Name `xml:"m:GetUserAvailabilityRequest"`
 	MailboxDataArray       MailboxDataArray
 	FreeBusyViewOptions    FreeBusyViewOptions
-	SuggestionsViewOptions SuggestionsViewOptions
+	SuggestionsViewOptions *SuggestionsViewOptions
 }
 
 // The MailboxDataArray element contains a list of mailboxes to query for
