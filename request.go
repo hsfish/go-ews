@@ -6,7 +6,7 @@ import (
 	"io"
 
 	"github.com/go-pogo/errors"
-	"github.com/soft-stech/go-ews/ewsxml"
+	"github.com/hsfish/go-ews/ewsxml"
 )
 
 type Operation interface {

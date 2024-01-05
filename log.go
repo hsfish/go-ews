@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 
-	"github.com/soft-stech/go-ews/ewsxml"
+	"github.com/hsfish/go-ews/ewsxml"
 )
 
 type Logger interface {

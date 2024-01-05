@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/soft-stech/go-ews/ewsxml"
+	"github.com/hsfish/go-ews/ewsxml"
 	"github.com/stretchr/testify/assert"
 )
 

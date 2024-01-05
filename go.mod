@@ -1,4 +1,4 @@
-module github.com/soft-stech/go-ews
+module github.com/hsfish/go-ews
 
 go 1.14
 
